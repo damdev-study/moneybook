@@ -1,4 +1,4 @@
-package api.damdev.moneybook.common;
+package api.damdev.moneybook.common.type;
 
 /**
  * Author : zenic
