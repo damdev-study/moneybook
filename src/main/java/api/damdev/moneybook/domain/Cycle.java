@@ -1,15 +1,16 @@
 package api.damdev.moneybook.domain;
 
+import api.damdev.moneybook.common.type.CycleType;
+import api.damdev.moneybook.common.type.DayOfWeek;
+import api.damdev.moneybook.common.type.MoneyType;
+import api.damdev.moneybook.dto.CycleInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,9 +21,15 @@ import java.time.LocalDateTime;
 public class Cycle {
 
     @Id
-    @Generated
-    private int id;
+    @GeneratedValue
+    private String id;
+
+    @OneToMany
+    private UserInfo user;
+
     private String cycleName;
+
+    private MoneyType moneyType;
 
     @CreationTimestamp
     private LocalDateTime regDate;
@@ -36,6 +43,36 @@ public class Cycle {
     private int cycleYear;
     private int cycleMonth;
     private int cycleDate;
-    private int cycleDayOfWeek;
+
+    @Enumerated(EnumType.STRING)
+    private DayOfWeek cycleDayOfWeek;
+
+    @Enumerated(EnumType.STRING)
+    private CycleType cycleType;
+
+    public Cycle(CycleInfo addInfo) {
+       this.cycleName = addInfo.getCycleName();
+       this.moneyType = addInfo.getMoneyType();
+       this.cycleStartDate = addInfo.getCycleStartDate();
+       this.cycleEndDate = addInfo.getCycleEndDate();
+       this.cycleYear = addInfo.getCycleYear();
+       this.cycleMonth = addInfo.getCycleMonth();
+       this.cycleDate = addInfo.getCycleDate();
+       this.cycleDayOfWeek = addInfo.getCycleDayOfWeek();
+       this.cycleType = addInfo.getCycleType();
+    }
+
+    public Cycle(CycleInfo addInfo, String id) {
+        this.id = id;
+        this.cycleName = addInfo.getCycleName();
+        this.moneyType = addInfo.getMoneyType();
+        this.cycleStartDate = addInfo.getCycleStartDate();
+        this.cycleEndDate = addInfo.getCycleEndDate();
+        this.cycleYear = addInfo.getCycleYear();
+        this.cycleMonth = addInfo.getCycleMonth();
+        this.cycleDate = addInfo.getCycleDate();
+        this.cycleDayOfWeek = addInfo.getCycleDayOfWeek();
+        this.cycleType = addInfo.getCycleType();
+    }
 
 }
