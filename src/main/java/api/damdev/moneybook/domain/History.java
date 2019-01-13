@@ -39,10 +39,6 @@ public class History extends MoneyInfo{
   @OneToMany
   private UserInfo user;
 
-  // MoneyInfo에서 수정 필요
-//  @Enumerated(EnumType.STRING)
-//  private MoneyType moneyType;
-
   private String category;
 
   private String reservation;
