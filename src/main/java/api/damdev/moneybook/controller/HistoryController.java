@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,10 @@ public class HistoryController {
   }
 
   @PostMapping
-  public ResponseEntity regHistory(@RequestBody @Valid MoneyInfo moneyInfo) {
+  public ResponseEntity regHistory(@RequestBody @Valid MoneyInfo moneyInfo, Errors errors) {
+    if (errors.hasErrors()) {
+      return ResponseEntity.badRequest().body(errors);
+    }
     History history = modelMapper.map(moneyInfo, History.class);
     History newHistory = this.moneyRepo.save(history);
     if (newHistory.getId() == null) {

@@ -2,6 +2,7 @@ package api.damdev.moneybook.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import api.damdev.moneybook.common.type.MoneyType;
@@ -59,7 +60,11 @@ public class HistoryControllerTest {
       .accept(MediaTypes.HAL_JSON)
       .content(objectMapper.writeValueAsString(moneyInfo)))
       .andDo(print())
-      .andExpect(status().isBadRequest());
+      .andExpect(status().isBadRequest())
+      .andExpect(jsonPath("$[0].field").exists())
+      .andExpect(jsonPath("$[0].objectName").exists())
+      .andExpect(jsonPath("$[0].code").exists())
+      .andExpect(jsonPath("$[0].defaultMessage").exists());
   }
 
   @Test
