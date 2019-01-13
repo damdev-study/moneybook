@@ -1,6 +1,8 @@
 package api.damdev.moneybook.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import api.damdev.moneybook.domain.Cycle;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CycleRepo extends MongoRepository<> {
+public interface CycleRepo extends JpaRepository<Cycle, String> {
+
 }
