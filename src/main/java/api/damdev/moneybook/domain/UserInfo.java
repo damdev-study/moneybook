@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 @Builder
 @Entity
@@ -18,6 +19,7 @@ import lombok.Setter;
 public class UserInfo {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(generator = "system-uuid")
+  @GenericGenerator(name = "system-uuid", strategy = "uuid")
   private String id;
 }
