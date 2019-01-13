@@ -1,16 +1,19 @@
 package api.damdev.moneybook.domain;
 
-import java.time.LocalDateTime;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import api.damdev.moneybook.common.type.ActiveType;
+import api.damdev.moneybook.common.type.CycleType;
+import api.damdev.moneybook.common.type.DayOfWeek;
+import api.damdev.moneybook.common.type.MoneyType;
+import api.damdev.moneybook.dto.cycle.CycleInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -19,23 +22,64 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Table(name = "TCYCLE")
 public class Cycle {
 
-  @Id
-  @GeneratedValue(generator = "system-uuid")
-  @GenericGenerator(name = "system-uuid", strategy = "uuid")
-  private String id;
-  private String cycleName;
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    private String id;
+    private String cycleName;
 
-  @CreationTimestamp
-  private LocalDateTime regDate;
+    @ManyToOne
+    private UserInfo user;
 
-  @UpdateTimestamp
-  private LocalDateTime updateDate;
+    private MoneyType moneyType;
 
-  private LocalDateTime cycleStartDate;
-  private LocalDateTime cycleEndDate;
+    @CreationTimestamp
+    private LocalDateTime regDate;
 
-  private int cycleYear;
-  private int cycleMonth;
-  private int cycleDate;
-  private int cycleDayOfWeek;
+    @UpdateTimestamp
+    private LocalDateTime updateDate;
+
+    private LocalDateTime cycleStartDate;
+    private LocalDateTime cycleEndDate;
+
+    private int cycleYear;
+    private int cycleMonth;
+    private int cycleDate;
+
+    @Enumerated(EnumType.STRING)
+    private DayOfWeek cycleDayOfWeek;
+
+    @Enumerated(EnumType.STRING)
+    private CycleType cycleType;
+
+    @Enumerated(EnumType.STRING)
+    private ActiveType active = ActiveType.ACITVE;
+
+    public Cycle(CycleInfo addInfo) {
+       this.cycleName = addInfo.getCycleName();
+       this.moneyType = addInfo.getMoneyType();
+       this.cycleStartDate = addInfo.getCycleStartDate();
+       this.cycleEndDate = addInfo.getCycleEndDate();
+       this.cycleYear = addInfo.getCycleYear();
+       this.cycleMonth = addInfo.getCycleMonth();
+       this.cycleDate = addInfo.getCycleDate();
+       this.cycleDayOfWeek = addInfo.getCycleDayOfWeek();
+       this.cycleType = addInfo.getCycleType();
+       this.active = addInfo.getActive();
+    }
+
+    public Cycle(CycleInfo addInfo, String id) {
+        this.id = id;
+        this.cycleName = addInfo.getCycleName();
+        this.moneyType = addInfo.getMoneyType();
+        this.cycleStartDate = addInfo.getCycleStartDate();
+        this.cycleEndDate = addInfo.getCycleEndDate();
+        this.cycleYear = addInfo.getCycleYear();
+        this.cycleMonth = addInfo.getCycleMonth();
+        this.cycleDate = addInfo.getCycleDate();
+        this.cycleDayOfWeek = addInfo.getCycleDayOfWeek();
+        this.cycleType = addInfo.getCycleType();
+        this.active = addInfo.getActive();
+    }
+
 }
