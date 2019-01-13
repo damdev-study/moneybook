@@ -1,7 +1,10 @@
 package api.damdev.moneybook.domain;
 
+import api.damdev.moneybook.common.MoneyType;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -34,7 +37,8 @@ public class History {
   @OneToMany
   private UserInfo user;
 
-  private String type;
+  @Enumerated(EnumType.STRING)
+  private MoneyType moneyType;
 
   private String category;
 
