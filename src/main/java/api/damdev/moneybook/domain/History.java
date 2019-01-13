@@ -1,7 +1,6 @@
 package api.damdev.moneybook.domain;
 
 import api.damdev.moneybook.common.type.MoneyType;
-import api.damdev.moneybook.dto.MoneyInfo;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +28,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Setter
 @ToString
 @Table(name = "THISTORY")
-public class History extends MoneyInfo {
+public class History {
 
   @Id
   @GeneratedValue(generator = "system-uuid")

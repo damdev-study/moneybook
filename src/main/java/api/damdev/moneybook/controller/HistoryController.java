@@ -7,6 +7,7 @@ import api.damdev.moneybook.dto.MoneyInfo;
 import api.damdev.moneybook.repository.MoneyRepo;
 import java.net.URI;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
@@ -40,10 +41,12 @@ public class HistoryController {
   }
 
   @PostMapping
-  public ResponseEntity regHistory(@RequestBody MoneyInfo moneyInfo) {
+  public ResponseEntity regHistory(@RequestBody @Valid MoneyInfo moneyInfo) {
+    System.out.println(moneyInfo);
     History history = modelMapper.map(moneyInfo, History.class);
+    System.out.println(history);
     History newHistory = this.moneyRepo.save(history);
-    if(newHistory.getId() == null) {
+    if (newHistory.getId() == null) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
     URI createURL = linkTo(HistoryController.class).slash(newHistory.getId()).toUri();
