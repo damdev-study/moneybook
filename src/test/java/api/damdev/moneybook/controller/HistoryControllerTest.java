@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,7 +34,11 @@ public class HistoryControllerTest {
 
   @Test
   public void regHistory() throws Exception {
-    MoneyInfo moneyInfo = new MoneyInfo("1", MoneyType.INCOME, "커피", "10000");
+    MoneyInfo moneyInfo = new MoneyInfo();
+    moneyInfo.setUserSeqId("1");
+    moneyInfo.setMoneyType(MoneyType.INCOME);
+    moneyInfo.setCategory("커피");
+    moneyInfo.setMoney("10000");
 //      MoneyInfo.builder()
 //      .userSeqId("1")
 //      .moneyType(MoneyType.INCOME)
@@ -43,7 +48,7 @@ public class HistoryControllerTest {
 
     mockMvc.perform(post("/api/moneybook/history")
       .contentType(MediaType.APPLICATION_JSON_UTF8)
-      .accept(MediaType.APPLICATION_JSON_UTF8)
+      .accept(MediaTypes.HAL_JSON)
       .content(objectMapper.writeValueAsString(moneyInfo)))
       .andDo(print())
       .andExpect(status().isCreated());

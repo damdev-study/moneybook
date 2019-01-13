@@ -6,13 +6,13 @@ import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -27,6 +27,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 @Table(name = "THISTORY")
 public class History extends MoneyInfo {
 
@@ -35,8 +36,8 @@ public class History extends MoneyInfo {
   @GenericGenerator(name = "system-uuid", strategy = "uuid")
   private String id;
 
-  @ManyToOne
-  private UserInfo user;
+//  @ManyToOne
+//  private UserInfo user;
 
   private MoneyType moneyType;
 
@@ -49,9 +50,4 @@ public class History extends MoneyInfo {
 
   @UpdateTimestamp
   private LocalDateTime updateDate;
-
-  public void setUser() {
-    setUser(user);
-    setUserSeqId(user.getId());
-  }
 }
