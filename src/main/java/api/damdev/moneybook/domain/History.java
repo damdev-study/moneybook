@@ -17,6 +17,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import api.damdev.moneybook.dto.MoneyInfo;
+
 /**
  * Author : zenic
  * Created : 24/12/2018
@@ -28,7 +30,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Getter
 @Setter
 @Table(name = "THISTORY")
-public class History {
+public class History extends MoneyInfo{
 
   @Id
   @GeneratedValue
@@ -37,8 +39,9 @@ public class History {
   @OneToMany
   private UserInfo user;
 
-  @Enumerated(EnumType.STRING)
-  private MoneyType moneyType;
+  // MoneyInfo에서 수정 필요
+//  @Enumerated(EnumType.STRING)
+//  private MoneyType moneyType;
 
   private String category;
 
@@ -51,4 +54,9 @@ public class History {
 
   @UpdateTimestamp
   private LocalDateTime updateDate;
+  
+  public void setUser() {
+	  setUser(user);
+	  setUserSeqId(user.getId());
+  }
 }
