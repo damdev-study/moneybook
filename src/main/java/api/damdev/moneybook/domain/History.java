@@ -1,6 +1,6 @@
 package api.damdev.moneybook.domain;
 
-import api.damdev.moneybook.common.MoneyType;
+import api.damdev.moneybook.common.type.MoneyType;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
