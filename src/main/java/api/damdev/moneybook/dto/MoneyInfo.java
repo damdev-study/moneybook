@@ -1,6 +1,9 @@
 package api.damdev.moneybook.dto;
 
-import api.damdev.moneybook.domain.History;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import api.damdev.moneybook.common.type.MoneyType;
 import lombok.Data;
 
 /**
@@ -12,7 +15,8 @@ public class MoneyInfo {
 
   private String userSeqId;
 
-  private String type;
+ @Enumerated(EnumType.STRING)
+ private MoneyType moneyType;
 
   private String category;
 
@@ -20,16 +24,4 @@ public class MoneyInfo {
 
   private String money;
   
-  public MoneyInfo() {
-	  
-  }
-  
-  public MoneyInfo(History history) {
-	  userSeqId = history.getUser().getId();
-	  type = history.getType();
-	  
-	  
-	  
-	  
-  }
 }
