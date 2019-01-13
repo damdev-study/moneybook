@@ -42,9 +42,7 @@ public class HistoryController {
 
   @PostMapping
   public ResponseEntity regHistory(@RequestBody @Valid MoneyInfo moneyInfo) {
-    System.out.println(moneyInfo);
     History history = modelMapper.map(moneyInfo, History.class);
-    System.out.println(history);
     History newHistory = this.moneyRepo.save(history);
     if (newHistory.getId() == null) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
