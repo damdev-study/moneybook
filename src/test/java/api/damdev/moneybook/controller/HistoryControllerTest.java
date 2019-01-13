@@ -4,16 +4,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import api.damdev.moneybook.common.type.MoneyType;
+import api.damdev.moneybook.dto.MoneyInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * Author : zenic
  * Created : 2019-01-13
  */
+@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class HistoryControllerTest {
@@ -21,10 +28,24 @@ public class HistoryControllerTest {
   @Autowired
   MockMvc mockMvc;
 
+  @Autowired
+  ObjectMapper objectMapper;
+
   @Test
   public void regHistory() throws Exception {
-    mockMvc.perform(post(""))
+    MoneyInfo moneyInfo = new MoneyInfo("1", MoneyType.INCOME, "커피", "10000");
+//      MoneyInfo.builder()
+//      .userSeqId("1")
+//      .moneyType(MoneyType.INCOME)
+//      .money("10000")
+//      .category("커피")
+//      .build();
+
+    mockMvc.perform(post("/api/moneybook/history")
+      .contentType(MediaType.APPLICATION_JSON_UTF8)
+      .accept(MediaType.APPLICATION_JSON_UTF8)
+      .content(objectMapper.writeValueAsString(moneyInfo)))
       .andDo(print())
-      .andExpect(status().isOk());
+      .andExpect(status().isCreated());
   }
 }

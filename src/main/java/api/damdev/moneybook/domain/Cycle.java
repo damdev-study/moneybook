@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
@@ -19,7 +20,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Cycle {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(generator = "system-uuid")
+  @GenericGenerator(name = "system-uuid", strategy = "uuid")
   private String id;
   private String cycleName;
 
