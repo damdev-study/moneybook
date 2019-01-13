@@ -1,7 +1,10 @@
 package api.damdev.moneybook.domain;
 
+import api.damdev.moneybook.common.type.MoneyType;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -36,10 +39,15 @@ public class History extends MoneyInfo{
   @OneToMany
   private UserInfo user;
 
-//  private String type;
-//  private String category;
-//  private String reservation;
-//  private String money;
+  // MoneyInfo에서 수정 필요
+//  @Enumerated(EnumType.STRING)
+//  private MoneyType moneyType;
+
+  private String category;
+
+  private String reservation;
+
+  private String money;
 
   @CreationTimestamp
   private LocalDateTime regDate;
