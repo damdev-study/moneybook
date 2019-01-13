@@ -28,7 +28,7 @@ public class Cycle {
     private String id;
     private String cycleName;
 
-    @OneToMany
+    @ManyToOne
     private UserInfo user;
 
     private MoneyType moneyType;

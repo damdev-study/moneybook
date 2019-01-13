@@ -24,8 +24,8 @@ public class CycleController {
         return ResponseEntity.ok(cycle);
     }
 
-    @PutMapping
-    public ResponseEntity modifyCycleData(@RequestBody CycleInfo info, @RequestBody String id) {
+    @PutMapping("{cycleId}")
+    public ResponseEntity modifyCycleData(@RequestBody CycleInfo info, @PathVariable("cycleId") String id) {
         Cycle cycle = cycleService.updateCycle(info, id);
 
         return ResponseEntity.ok(cycle);
