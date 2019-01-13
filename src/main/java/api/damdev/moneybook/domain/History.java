@@ -1,20 +1,20 @@
 package api.damdev.moneybook.domain;
 
 import api.damdev.moneybook.common.type.MoneyType;
+import api.damdev.moneybook.dto.MoneyInfo;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
@@ -27,22 +27,20 @@ import org.hibernate.annotations.UpdateTimestamp;
 @AllArgsConstructor
 @Getter
 @Setter
-@Data
 @Table(name = "THISTORY")
-public class History {
+public class History extends MoneyInfo {
 
   @Id
+  @GeneratedValue(generator = "system-uuid")
+  @GenericGenerator(name = "system-uuid", strategy = "uuid")
   private String id;
 
-  @OneToMany
+  @ManyToOne
   private UserInfo user;
 
-  @Enumerated(EnumType.STRING)
   private MoneyType moneyType;
 
   private String category;
-
-  private String reservation;
 
   private String money;
 
@@ -51,4 +49,9 @@ public class History {
 
   @UpdateTimestamp
   private LocalDateTime updateDate;
+
+  public void setUser() {
+    setUser(user);
+    setUserSeqId(user.getId());
+  }
 }
