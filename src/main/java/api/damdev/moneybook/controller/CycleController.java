@@ -1,6 +1,6 @@
 package api.damdev.moneybook.controller;
 
-import api.damdev.moneybook.domain.CycleParam;
+import api.damdev.moneybook.dto.CycleParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +13,7 @@ public class CycleController {
 
     @PostMapping
     public ResponseEntity addCycleData(@RequestBody CycleParam param) {
-        
+
 
         return ResponseEntity.ok().build();
     }

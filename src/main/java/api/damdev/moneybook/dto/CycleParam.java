@@ -1,4 +1,4 @@
-package api.damdev.moneybook.domain;
+package api.damdev.moneybook.dto;
 
 import lombok.Data;
 
