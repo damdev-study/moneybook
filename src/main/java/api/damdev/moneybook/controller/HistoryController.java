@@ -9,14 +9,15 @@ import java.net.URI;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/moneybook/history", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api/moneybook/history", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 public class HistoryController {
 
   private final MoneyRepo moneyRepo;
@@ -39,9 +40,12 @@ public class HistoryController {
   }
 
   @PostMapping
-  public ResponseEntity regHistory(MoneyInfo moneyInfo) {
+  public ResponseEntity regHistory(@RequestBody MoneyInfo moneyInfo) {
     History history = modelMapper.map(moneyInfo, History.class);
     History newHistory = this.moneyRepo.save(history);
+    if(newHistory.getId() == null) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
     URI createURL = linkTo(HistoryController.class).slash(newHistory.getId()).toUri();
     return ResponseEntity.created(createURL).body(newHistory);
   }
