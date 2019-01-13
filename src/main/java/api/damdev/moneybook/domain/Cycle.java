@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name="CYCLE")
+@Table(name="TCYCLE")
 public class Cycle {
 
     @Id
