@@ -1,9 +1,10 @@
 package api.damdev.moneybook.domain;
 
+import api.damdev.moneybook.common.type.ActiveType;
 import api.damdev.moneybook.common.type.CycleType;
 import api.damdev.moneybook.common.type.DayOfWeek;
 import api.damdev.moneybook.common.type.MoneyType;
-import api.damdev.moneybook.dto.CycleInfo;
+import api.damdev.moneybook.dto.cycle.CycleInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,6 +51,9 @@ public class Cycle {
     @Enumerated(EnumType.STRING)
     private CycleType cycleType;
 
+    @Enumerated(EnumType.STRING)
+    private ActiveType active = ActiveType.ACITVE;
+
     public Cycle(CycleInfo addInfo) {
        this.cycleName = addInfo.getCycleName();
        this.moneyType = addInfo.getMoneyType();
@@ -60,6 +64,7 @@ public class Cycle {
        this.cycleDate = addInfo.getCycleDate();
        this.cycleDayOfWeek = addInfo.getCycleDayOfWeek();
        this.cycleType = addInfo.getCycleType();
+       this.active = addInfo.getActive();
     }
 
     public Cycle(CycleInfo addInfo, String id) {
@@ -73,6 +78,7 @@ public class Cycle {
         this.cycleDate = addInfo.getCycleDate();
         this.cycleDayOfWeek = addInfo.getCycleDayOfWeek();
         this.cycleType = addInfo.getCycleType();
+        this.active = addInfo.getActive();
     }
 
 }

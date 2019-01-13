@@ -1,5 +1,6 @@
-package api.damdev.moneybook.dto;
+package api.damdev.moneybook.dto.cycle;
 
+import api.damdev.moneybook.common.type.ActiveType;
 import api.damdev.moneybook.common.type.CycleType;
 import api.damdev.moneybook.common.type.DayOfWeek;
 import api.damdev.moneybook.common.type.MoneyType;
@@ -18,5 +19,5 @@ public class CycleInfo {
     private int cycleDate;
     private DayOfWeek cycleDayOfWeek;
     private CycleType cycleType;
-
+    private ActiveType active;
 }

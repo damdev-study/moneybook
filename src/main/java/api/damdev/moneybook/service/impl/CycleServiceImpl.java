@@ -1,7 +1,7 @@
 package api.damdev.moneybook.service.impl;
 
 import api.damdev.moneybook.domain.Cycle;
-import api.damdev.moneybook.dto.CycleInfo;
+import api.damdev.moneybook.dto.cycle.CycleInfo;
 import api.damdev.moneybook.repository.CycleRepo;
 import api.damdev.moneybook.service.CycleService;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,16 @@ public class CycleServiceImpl implements CycleService {
     CycleRepo cycleRepo;
 
     @Override
-    public void addCycle(CycleInfo addInfo) {
+    public Cycle insertCycle(CycleInfo addInfo) {
         Cycle entity = new Cycle(addInfo);
 
-        cycleRepo.save(entity);
+        return cycleRepo.save(entity);
+    }
+
+    @Override
+    public Cycle updateCycle(CycleInfo addInfo, String id) {
+        Cycle entity = new Cycle(addInfo, id);
+
+        return cycleRepo.save(entity);
     }
 }
