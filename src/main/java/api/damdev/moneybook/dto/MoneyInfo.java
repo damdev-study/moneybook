@@ -1,5 +1,6 @@
 package api.damdev.moneybook.dto;
 
+import api.damdev.moneybook.domain.History;
 import lombok.Data;
 
 /**
@@ -18,4 +19,17 @@ public class MoneyInfo {
   private String reservation;
 
   private String money;
+  
+  public MoneyInfo() {
+	  
+  }
+  
+  public MoneyInfo(History history) {
+	  userSeqId = history.getUser().getId();
+	  type = history.getType();
+	  
+	  
+	  
+	  
+  }
 }
