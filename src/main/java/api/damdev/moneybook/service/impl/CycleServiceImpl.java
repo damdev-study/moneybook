@@ -7,6 +7,7 @@ import api.damdev.moneybook.service.CycleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("cycleService")
 public class CycleServiceImpl implements CycleService {
@@ -26,5 +27,12 @@ public class CycleServiceImpl implements CycleService {
         Cycle entity = new Cycle(addInfo, id);
 
         return cycleRepo.save(entity);
+    }
+
+    @Override
+    public List<Cycle> findAllCycle() {
+        List<Cycle> list = cycleRepo.findAll();
+
+        return list;
     }
 }

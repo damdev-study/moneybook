@@ -9,6 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/moneybook/cycle", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -29,5 +32,12 @@ public class CycleController {
         Cycle cycle = cycleService.updateCycle(info, id);
 
         return ResponseEntity.ok(cycle);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity viewListCycleData() {
+        List<Cycle> list = cycleService.findAllCycle();
+
+        return ResponseEntity.ok(list);
     }
 }

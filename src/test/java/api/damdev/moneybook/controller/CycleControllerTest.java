@@ -90,4 +90,14 @@ public class CycleControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
     }
+
+    @Test
+    public void viewListCycle() throws Exception {
+        mockMvc.perform(put("/api/moneybook/cycle/list")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+        .andDo(print())
+        .andExpect(status().isOk());
+    }
 }
