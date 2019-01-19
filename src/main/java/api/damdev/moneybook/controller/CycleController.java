@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 @Slf4j
@@ -47,5 +49,12 @@ public class CycleController {
         Cycle cycle = cycleService.deleteCycle(id);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity viewListCycleData() {
+        List<Cycle> list = cycleService.findAllCycle();
+
+        return ResponseEntity.ok(list);
     }
 }

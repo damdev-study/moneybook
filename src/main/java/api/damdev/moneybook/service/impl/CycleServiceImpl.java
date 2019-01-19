@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("cycleService")
 public class CycleServiceImpl implements CycleService {
@@ -45,5 +46,12 @@ public class CycleServiceImpl implements CycleService {
         entity.setActive(ActiveType.INACTIVE);
 
         return cycleRepo.save(entity);
+    }
+
+    @Override
+    public List<Cycle> findAllCycle() {
+        List<Cycle> list = cycleRepo.findAll();
+
+        return list;
     }
 }
