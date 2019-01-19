@@ -69,17 +69,8 @@ public class Cycle {
     }
 
     public Cycle(CycleInfo addInfo, String id) {
+        this(addInfo);
         this.id = id;
-        this.cycleName = addInfo.getCycleName();
-        this.moneyType = addInfo.getMoneyType();
-        this.cycleStartDate = addInfo.getCycleStartDate();
-        this.cycleEndDate = addInfo.getCycleEndDate();
-        this.cycleYear = addInfo.getCycleYear();
-        this.cycleMonth = addInfo.getCycleMonth();
-        this.cycleDate = addInfo.getCycleDate();
-        this.cycleDayOfWeek = addInfo.getCycleDayOfWeek();
-        this.cycleType = addInfo.getCycleType();
-        this.active = addInfo.getActive();
     }
 
 }

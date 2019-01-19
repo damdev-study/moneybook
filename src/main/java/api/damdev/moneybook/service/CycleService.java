@@ -7,4 +7,6 @@ public interface CycleService {
     Cycle insertCycle(CycleInfo addInfo);
 
     Cycle updateCycle(CycleInfo addInfo, String id);
+
+    Cycle deleteCycle(String id);
 }
