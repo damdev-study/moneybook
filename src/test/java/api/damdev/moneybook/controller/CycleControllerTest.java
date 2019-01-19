@@ -21,9 +21,7 @@ import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -87,6 +85,20 @@ public class CycleControllerTest {
         .andExpect(status().isOk());
     }
 
+    @Test
+    public void viewListCycle() throws Exception {
+        CycleInfo cycleInfo = setCycle("List Select Cycle");
+
+        Cycle cycle = new Cycle(cycleInfo);
+        cycleRepo.save(cycle);
+        mockMvc.perform(get("/api/moneybook/cycle/list")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
     private CycleInfo setCycle(String cycleName) {
         CycleInfo cycleInfo = CycleInfo.builder()
                 .cycleName(cycleName)
@@ -105,13 +117,4 @@ public class CycleControllerTest {
         return cycleInfo;
     }
 
-    @Test
-    public void viewListCycle() throws Exception {
-        mockMvc.perform(put("/api/moneybook/cycle/list")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-        )
-        .andDo(print())
-        .andExpect(status().isOk());
-    }
 }
