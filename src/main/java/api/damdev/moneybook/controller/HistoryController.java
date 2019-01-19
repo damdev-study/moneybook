@@ -56,8 +56,7 @@ public class HistoryController {
     URI createURL = linkTo(HistoryController.class).slash(newHistory.getId()).toUri();
     HistoryResource historyResource = new HistoryResource(newHistory);
     historyResource.add(linkTo(HistoryController.class).withRel("query-history"));
-    historyResource.add(new Link("/docs/index.html#resources-history-create")
-      .withRel("profile"));  // REST Docs 적용 후 URL 추가
+    historyResource.add(new Link("/docs/index.html#resources-history-create").withRel("profile"));
     return ResponseEntity.created(createURL).body(historyResource);
   }
 
@@ -76,17 +75,33 @@ public class HistoryController {
     }
 
     HistoryResource historyResource = new HistoryResource(history);
-    historyResource.add(new Link("/docs/index.html#resources-history-get")
-      .withRel("profile"));  // REST Docs 적용 후 URL 추가
+    historyResource.add(new Link("/docs/index.html#resources-history-get").withRel("profile"));
 
     return ResponseEntity.ok(historyResource);
   }
 
   @PutMapping("{historyId}")
-  public ResponseEntity updateHistory(@PathVariable String historyId) {
-    History history = moneyRepo.findById(historyId).get();
-    log.info(history + "");
-    return new ResponseEntity(HttpStatus.OK);
+  public ResponseEntity updateHistory(@PathVariable String historyId,
+    @RequestBody @Valid MoneyInfo moneyInfo, Errors errors) {
+    History history = moneyRepo.findById(historyId).orElse(new History());
+
+    if (history.getId() == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    if (errors.hasErrors()) {
+      return ResponseEntity.badRequest().body(errors);
+    }
+
+    History changeHistory = modelMapper.map(moneyInfo, History.class);
+    changeHistory.setId(historyId);
+
+    History changedHistory = moneyRepo.save(changeHistory);
+
+    HistoryResource historyResource = new HistoryResource(changedHistory);
+    historyResource.add(new Link("/docs/index.html#resources-history-update").withRel("profile"));
+
+    return ResponseEntity.ok(historyResource);
   }
 
   @DeleteMapping("{historyId}")

@@ -13,7 +13,7 @@ public class MoneyInfoTest {
   @Test
   public void builder() {
     MoneyInfo history = MoneyInfo.builder()
-      .money("10000")
+      .money(10000)
       .build();
 
     assertThat(history.getUserSeqId()).isNull();
@@ -23,7 +23,7 @@ public class MoneyInfoTest {
   @Test
   public void javaBean() {
     MoneyInfo history = new MoneyInfo();
-    history.setMoney("10000");
+    history.setMoney(10000);
 
     assertThat(history.getUserSeqId()).isNull();
     assertThat(history.getMoney()).isNotNull();
