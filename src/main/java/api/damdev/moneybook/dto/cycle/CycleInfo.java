@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,8 +17,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CycleInfo {
-
+    @NotNull
     private String cycleName;
+    @NotNull
     private MoneyType moneyType;
     private LocalDateTime cycleStartDate;
     private LocalDateTime cycleEndDate;
@@ -25,6 +27,8 @@ public class CycleInfo {
     private int cycleMonth;
     private int cycleDate;
     private DayOfWeek cycleDayOfWeek;
+    @NotNull
     private CycleType cycleType;
+    @NotNull
     private ActiveType active;
 }

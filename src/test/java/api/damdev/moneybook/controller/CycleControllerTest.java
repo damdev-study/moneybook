@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -42,18 +43,7 @@ public class CycleControllerTest {
 
     @Test
     public void addCycleData() throws Exception {
-        CycleInfo cycleInfo = CycleInfo.builder()
-                .cycleName("First Cycle")
-                .moneyType(MoneyType.INCOME)
-                .cycleStartDate(LocalDateTime.now())
-                .cycleEndDate(LocalDateTime.now())
-                .cycleYear(0)
-                .cycleMonth(3)
-                .cycleDate(0)
-                .cycleDayOfWeek(DayOfWeek.SAT)
-                .cycleType(CycleType.FIXED)
-                .active(ActiveType.ACITVE)
-                .build();
+        CycleInfo cycleInfo = setCycle("Insert Cycle");
 
         mockMvc.perform(post("/api/moneybook/cycle")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -66,8 +56,40 @@ public class CycleControllerTest {
 
     @Test
     public void modifyCycle() throws Exception {
+        CycleInfo cycleInfo = setCycle("Update Cycle");
+
+        //데이터 추가 필요
+        Cycle cycle = new Cycle(cycleInfo);
+        Cycle result = cycleRepo.save(cycle);
+
+        mockMvc.perform(put("/api/moneybook/cycle/{id}", result.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(cycleInfo))
+        )
+        .andDo(print())
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    public void removeCycle() throws Exception {
+        CycleInfo cycleInfo = setCycle("Delete Cycle");
+
+        Cycle cycle = new Cycle(cycleInfo);
+        Cycle result = cycleRepo.save(cycle);
+
+        mockMvc.perform(delete("/api/moneybook/cycle/{id}", result.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(cycleInfo))
+        )
+        .andDo(print())
+        .andExpect(status().isOk());
+    }
+
+    private CycleInfo setCycle(String cycleName) {
         CycleInfo cycleInfo = CycleInfo.builder()
-                .cycleName("Second Cycle")
+                .cycleName(cycleName)
                 .moneyType(MoneyType.INCOME)
                 .cycleStartDate(LocalDateTime.now())
                 .cycleEndDate(LocalDateTime.now())
@@ -78,16 +100,8 @@ public class CycleControllerTest {
                 .cycleType(CycleType.FIXED)
                 .active(ActiveType.ACITVE)
                 .build();
-        Cycle cycle = new Cycle(cycleInfo);
 
-        Cycle result = cycleRepo.save(cycle);
 
-        mockMvc.perform(put("/api/moneybook/cycle/"+result.getId())
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(cycleInfo))
-        )
-        .andDo(print())
-        .andExpect(status().isOk());
+        return cycleInfo;
     }
 }
