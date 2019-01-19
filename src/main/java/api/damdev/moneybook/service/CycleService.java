@@ -10,5 +10,7 @@ public interface CycleService {
 
     Cycle updateCycle(CycleInfo addInfo, String id);
 
+    Cycle deleteCycle(String id);
+
     List<Cycle> findAllCycle();
 }
