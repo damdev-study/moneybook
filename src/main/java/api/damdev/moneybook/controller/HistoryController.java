@@ -56,7 +56,8 @@ public class HistoryController {
     URI createURL = linkTo(HistoryController.class).slash(newHistory.getId()).toUri();
     HistoryResource historyResource = new HistoryResource(newHistory);
     historyResource.add(linkTo(HistoryController.class).withRel("query-history"));
-    historyResource.add(new Link("").withRel("profile"));  // REST Docs 적용 후 URL 추가
+    historyResource.add(new Link("/docs/index.html#resources-history-create")
+      .withRel("profile"));  // REST Docs 적용 후 URL 추가
     return ResponseEntity.created(createURL).body(historyResource);
   }
 
@@ -68,8 +69,17 @@ public class HistoryController {
 
   @GetMapping("{historyId}")
   public ResponseEntity getHistory(@PathVariable String historyId) {
-    History history = moneyRepo.findById(historyId).get();
-    return ResponseEntity.ok(history);
+    History history = moneyRepo.findById(historyId).orElse(new History());
+
+    if (history.getId() == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    HistoryResource historyResource = new HistoryResource(history);
+    historyResource.add(new Link("/docs/index.html#resources-history-get")
+      .withRel("profile"));  // REST Docs 적용 후 URL 추가
+
+    return ResponseEntity.ok(historyResource);
   }
 
   @PutMapping("{historyId}")

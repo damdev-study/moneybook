@@ -90,4 +90,21 @@ public class HistoryControllerTest {
       .andExpect(status().isBadRequest());
   }
 
+  @Test
+  public void getHistory() throws Exception {
+    History history = History.builder().build();
+    History getHistory = moneyRepo.save(history);
+
+    mockMvc.perform(get("/api/moneybook/history/{id}", getHistory.getId()))
+      .andDo(print())
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("id").exists());
+  }
+
+  @Test
+  public void getHistory404() throws Exception {
+    mockMvc.perform(get("/api/moneybook/history/12345"))
+      .andDo(print())
+      .andExpect(status().isNotFound());
+  }
 }
