@@ -5,11 +5,13 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import api.damdev.moneybook.domain.History;
 import api.damdev.moneybook.dto.MoneyInfo;
 import api.damdev.moneybook.repository.MoneyRepo;
+import api.damdev.moneybook.resources.HistoryResource;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +54,10 @@ public class HistoryController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
     URI createURL = linkTo(HistoryController.class).slash(newHistory.getId()).toUri();
-    return ResponseEntity.created(createURL).body(newHistory);
+    HistoryResource historyResource = new HistoryResource(newHistory);
+    historyResource.add(linkTo(HistoryController.class).withRel("query-history"));
+    historyResource.add(new Link("").withRel("profile"));  // REST Docs 적용 후 URL 추가
+    return ResponseEntity.created(createURL).body(historyResource);
   }
 
   @GetMapping

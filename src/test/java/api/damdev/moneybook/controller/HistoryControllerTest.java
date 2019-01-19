@@ -48,7 +48,9 @@ public class HistoryControllerTest {
       .accept(MediaTypes.HAL_JSON)
       .content(objectMapper.writeValueAsString(moneyInfo)))
       .andDo(print())
-      .andExpect(status().isCreated());
+      .andExpect(status().isCreated())
+      .andExpect(jsonPath("id").exists())
+      .andExpect(jsonPath("_links.self").exists());
   }
 
   @Test
