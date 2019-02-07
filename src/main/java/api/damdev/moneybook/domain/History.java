@@ -42,7 +42,7 @@ public class History {
 
   private String category;
 
-  private String money;
+  private int money;
 
   @CreationTimestamp
   private LocalDateTime regDate;

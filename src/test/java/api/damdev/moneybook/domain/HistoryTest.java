@@ -13,7 +13,7 @@ public class HistoryTest {
   @Test
   public void builder() {
     History history = History.builder()
-      .money("10000")
+      .money(10000)
       .build();
 
     assertThat(history.getId()).isNull();
@@ -23,7 +23,7 @@ public class HistoryTest {
   @Test
   public void javaBean() {
     History history = new History();
-    history.setMoney("10000");
+    history.setMoney(10000);
 
     assertThat(history.getMoney()).isNotNull();
   }

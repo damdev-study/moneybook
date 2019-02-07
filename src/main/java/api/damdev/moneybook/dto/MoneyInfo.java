@@ -1,6 +1,7 @@
 package api.damdev.moneybook.dto;
 
 import api.damdev.moneybook.common.type.MoneyType;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,6 @@ import lombok.Setter;
 @Setter
 public class MoneyInfo {
 
-  @NotNull
   private String userSeqId;
 
   @NotNull
@@ -28,6 +28,6 @@ public class MoneyInfo {
   @NotNull
   private String category;
 
-  @NotNull
-  private String money;
+  @Min(0)
+  private int money;
 }
