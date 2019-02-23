@@ -2,10 +2,14 @@ package api.damdev.moneybook.controller;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
+import api.damdev.moneybook.common.type.ActiveType;
+import api.damdev.moneybook.domain.History;
+import api.damdev.moneybook.dto.MoneyInfo;
+import api.damdev.moneybook.repository.MoneyRepo;
+import api.damdev.moneybook.resources.HistoryResource;
 import java.net.URI;
-
 import javax.validation.Valid;
-
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,12 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import api.damdev.moneybook.domain.History;
-import api.damdev.moneybook.dto.MoneyInfo;
-import api.damdev.moneybook.repository.MoneyRepo;
-import api.damdev.moneybook.resources.HistoryResource;
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Author : zenic
  * Created : 24/12/2018
@@ -43,11 +41,11 @@ public class HistoryController {
   private final MoneyRepo moneyRepo;
 
   private final ModelMapper modelMapper;
-  
-//  private final HistoryService historyService;
-  
 
-  public HistoryController(MoneyRepo moneyRepo, ModelMapper modelMapper/*, HistoryService historyService*/) {
+//  private final HistoryService historyService;
+
+  public HistoryController(MoneyRepo moneyRepo,
+    ModelMapper modelMapper/*, HistoryService historyService*/) {
     this.moneyRepo = moneyRepo;
     this.modelMapper = modelMapper;
 //    this.historyService = historyService;
@@ -75,22 +73,24 @@ public class HistoryController {
 //    Page<History> history = moneyRepo.findAll(PageRequest.of(0, 10));
 //    return ResponseEntity.ok(history);
 //  }
-  
+
   @GetMapping("list")
-  public ResponseEntity search(@RequestParam(defaultValue="", required=false) String query, @RequestParam(defaultValue="category", required=false) String target,
-		  @RequestParam(defaultValue="0", required=false) Integer pageNum, @RequestParam(defaultValue="10", required=false) Integer pageSize, 
-		  @RequestParam(defaultValue="category", required=false) String sortTarget, @RequestParam(defaultValue="0", required=false) Integer sortReverse){
-    PageRequest page = PageRequest.of(pageNum, pageSize, 
-    		sortReverse==1 ?  Sort.by(sortTarget).descending() : Sort.by(sortTarget).ascending() );
-    Page<History> list =null;
+  public ResponseEntity search(@RequestParam(defaultValue = "", required = false) String query,
+    @RequestParam(defaultValue = "category", required = false) String target,
+    @RequestParam(defaultValue = "0", required = false) Integer pageNum,
+    @RequestParam(defaultValue = "10", required = false) Integer pageSize,
+    @RequestParam(defaultValue = "category", required = false) String sortTarget,
+    @RequestParam(defaultValue = "0", required = false) Integer sortReverse) {
+    PageRequest page = PageRequest.of(pageNum, pageSize,
+      sortReverse == 1 ? Sort.by(sortTarget).descending() : Sort.by(sortTarget).ascending());
+    Page<History> list = null;
     log.warn("tttttttttttttttttarget : " + target + ", query : " + query);
-    if ( target.equals("category") ) {
-    	list = moneyRepo.findByCategory(query, page);
+    if (target.equals("category")) {
+      list = moneyRepo.findByCategory(query, page);
     }
-    
+
     return ResponseEntity.ok(list);
   }
-
 
   @GetMapping("{historyId}")
   public ResponseEntity getHistory(@PathVariable String historyId) {
