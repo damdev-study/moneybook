@@ -1,5 +1,6 @@
 package api.damdev.moneybook.domain;
 
+import api.damdev.moneybook.common.type.ActiveType;
 import api.damdev.moneybook.common.type.MoneyType;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
@@ -43,6 +44,8 @@ public class History {
   private String category;
 
   private int money;
+
+  private ActiveType activeType = ActiveType.ACITVE;
 
   @CreationTimestamp
   private LocalDateTime regDate;
