@@ -214,4 +214,45 @@ public class HistoryControllerTest {
       .build();
     return moneyRepo.save(history);
   }
+  
+  
+  
+  
+//  @Test
+//  public void findAll() throws Exception{
+//
+//    History moneyInfo = new History();
+////    moneyInfo.setUserSeqId("2");
+//    moneyInfo.setMoneyType(MoneyType.INCOME);
+//    moneyInfo.setCategory("커피2");
+//    moneyInfo.setMoney(20000);
+//    moneyRepo.save(moneyInfo);
+//	    
+//    mockMvc.perform(get("/api/moneybook/history/search")
+//        .contentType(MediaType.APPLICATION_JSON_UTF8)
+//        .accept(MediaTypes.HAL_JSON)
+//      ).andDo(print())
+//      .andExpect(status().isOk());
+//  }
+  
+
+  @Test
+  public void findSearch() throws Exception{
+
+    History moneyInfo = new History();
+//    moneyInfo.setUserSeqId("2");
+    moneyInfo.setMoneyType(MoneyType.INCOME);
+    moneyInfo.setCategory("커피3");
+    moneyInfo.setMoney(20000);
+    moneyRepo.save(moneyInfo);
+	    
+    mockMvc.perform(get("/api/moneybook/history/list")
+    		.param("target", "category")
+    		.param("query", "3")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .accept(MediaTypes.HAL_JSON)
+      ).andDo(print())
+      .andExpect(status().isOk());
+  }
+
 }
