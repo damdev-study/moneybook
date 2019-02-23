@@ -31,6 +31,9 @@ public class Cycle {
     @ManyToOne
     private UserInfo user;
 
+//    @Basic(optional = false)
+//    @Column(name = "moneyType", columnDefinition = "enum('SPENDING','INCOME')")
+    @Enumerated(value = EnumType.STRING)
     private MoneyType moneyType;
 
     @CreationTimestamp
