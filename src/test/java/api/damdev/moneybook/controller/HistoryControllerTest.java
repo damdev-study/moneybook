@@ -1,5 +1,6 @@
 package api.damdev.moneybook.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -187,6 +188,22 @@ public class HistoryControllerTest {
       .andExpect(jsonPath("$[0].objectName").exists())
       .andExpect(jsonPath("$[0].code").exists())
       .andExpect(jsonPath("$[0].defaultMessage").exists());
+  }
+
+  @Test
+  public void deleteHistory() throws Exception {
+    History history = generateHistory(200);
+
+    mockMvc.perform(delete("/api/moneybook/history/{id}", history.getId()))
+      .andDo(print())
+      .andExpect(status().isOk());
+  }
+
+  @Test
+  public void deleteHistory_Bad_Request_Not_Found() throws Exception {
+    mockMvc.perform(delete("/api/moneybook/history/12345"))
+      .andDo(print())
+      .andExpect(status().isNotFound());
   }
 
   private History generateHistory(int index) {
