@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
 @NoArgsConstructor
+@Data
 @AllArgsConstructor
 public class CycleView {
     private String cycleName;

@@ -1,7 +1,9 @@
 package api.damdev.moneybook.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,7 +48,7 @@ public class HistoryControllerTest {
     MoneyInfo moneyInfo = MoneyInfo.builder()
       .userSeqId("1")
       .moneyType(MoneyType.INCOME)
-      .money("10000")
+      .money(10000)
       .category("커피")
       .build();
 
@@ -92,8 +94,7 @@ public class HistoryControllerTest {
 
   @Test
   public void getHistory() throws Exception {
-    History history = History.builder().build();
-    History getHistory = moneyRepo.save(history);
+    History getHistory = generateHistory(10);
 
     mockMvc.perform(get("/api/moneybook/history/{id}", getHistory.getId()))
       .andDo(print())
@@ -107,4 +108,151 @@ public class HistoryControllerTest {
       .andDo(print())
       .andExpect(status().isNotFound());
   }
+
+  @Test
+  public void updateHistory() throws Exception {
+    // Given
+    History getHistory = generateHistory(100);
+    MoneyInfo moneyInfo = MoneyInfo.builder()
+      .money(1000)
+      .moneyType(MoneyType.INCOME)
+      .category("카테고리")
+      .build();
+
+    // When & Then
+    mockMvc.perform(put("/api/moneybook/history/{id}", getHistory.getId())
+      .contentType(MediaType.APPLICATION_JSON_UTF8)
+      .content(objectMapper.writeValueAsString(moneyInfo))
+    )
+      .andDo(print())
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("id").exists())
+      .andExpect(jsonPath("money").exists())
+      .andExpect(jsonPath("moneyType").exists())
+      .andExpect(jsonPath("category").exists());
+  }
+
+  @Test
+  public void updateHistory404() throws Exception {
+    MoneyInfo moneyInfo = MoneyInfo.builder()
+      .money(1000)
+      .moneyType(MoneyType.INCOME)
+      .category("카테고리")
+      .build();
+
+    mockMvc.perform(put("/api/moneybook/history/12345")
+      .contentType(MediaType.APPLICATION_JSON_UTF8)
+      .content(objectMapper.writeValueAsString(moneyInfo))
+    )
+      .andDo(print())
+      .andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void updateHistory_Bad_Request_Empty_Input() throws Exception {
+    // Given
+    History getHistory = generateHistory(100);
+    MoneyInfo moneyInfo = new MoneyInfo();
+
+    // When & Then
+    mockMvc.perform(put("/api/moneybook/history/{id}", getHistory.getId())
+      .contentType(MediaType.APPLICATION_JSON_UTF8)
+      .content(objectMapper.writeValueAsString(moneyInfo))
+    )
+      .andDo(print())
+      .andExpect(status().isBadRequest())
+      .andExpect(jsonPath("$[0].field").exists())
+      .andExpect(jsonPath("$[0].objectName").exists())
+      .andExpect(jsonPath("$[0].code").exists())
+      .andExpect(jsonPath("$[0].defaultMessage").exists());
+  }
+
+  @Test
+  public void updateHistory_Bad_Request_Wrong_Input() throws Exception {
+    // Given
+    History getHistory = generateHistory(100);
+    MoneyInfo moneyInfo = MoneyInfo.builder()
+      .money(-1000)
+      .moneyType(MoneyType.INCOME)
+      .category("카테고리")
+      .build();
+
+    // When & Then
+    mockMvc.perform(put("/api/moneybook/history/{id}", getHistory.getId())
+      .contentType(MediaType.APPLICATION_JSON_UTF8)
+      .content(objectMapper.writeValueAsString(moneyInfo))
+    )
+      .andDo(print())
+      .andExpect(status().isBadRequest())
+      .andExpect(jsonPath("$[0].field").exists())
+      .andExpect(jsonPath("$[0].objectName").exists())
+      .andExpect(jsonPath("$[0].code").exists())
+      .andExpect(jsonPath("$[0].defaultMessage").exists());
+  }
+
+  @Test
+  public void deleteHistory() throws Exception {
+    History history = generateHistory(200);
+
+    mockMvc.perform(delete("/api/moneybook/history/{id}", history.getId()))
+      .andDo(print())
+      .andExpect(status().isOk());
+  }
+
+  @Test
+  public void deleteHistory_Bad_Request_Not_Found() throws Exception {
+    mockMvc.perform(delete("/api/moneybook/history/12345"))
+      .andDo(print())
+      .andExpect(status().isNotFound());
+  }
+
+  private History generateHistory(int index) {
+    History history = History.builder()
+      .money(index + 1000)
+      .category("카테고리")
+      .moneyType(index % 2 == 0 ? MoneyType.INCOME : MoneyType.SPENDING)
+      .build();
+    return moneyRepo.save(history);
+  }
+  
+  
+  
+  
+//  @Test
+//  public void findAll() throws Exception{
+//
+//    History moneyInfo = new History();
+////    moneyInfo.setUserSeqId("2");
+//    moneyInfo.setMoneyType(MoneyType.INCOME);
+//    moneyInfo.setCategory("커피2");
+//    moneyInfo.setMoney(20000);
+//    moneyRepo.save(moneyInfo);
+//	    
+//    mockMvc.perform(get("/api/moneybook/history/search")
+//        .contentType(MediaType.APPLICATION_JSON_UTF8)
+//        .accept(MediaTypes.HAL_JSON)
+//      ).andDo(print())
+//      .andExpect(status().isOk());
+//  }
+  
+
+  @Test
+  public void findSearch() throws Exception{
+
+    History moneyInfo = new History();
+//    moneyInfo.setUserSeqId("2");
+    moneyInfo.setMoneyType(MoneyType.INCOME);
+    moneyInfo.setCategory("커피3");
+    moneyInfo.setMoney(20000);
+    moneyRepo.save(moneyInfo);
+	    
+    mockMvc.perform(get("/api/moneybook/history/list")
+    		.param("target", "category")
+    		.param("query", "3")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .accept(MediaTypes.HAL_JSON)
+      ).andDo(print())
+      .andExpect(status().isOk());
+  }
+
 }
