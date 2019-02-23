@@ -2,6 +2,7 @@ package api.damdev.moneybook.controller;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
+import api.damdev.moneybook.common.type.ActiveType;
 import api.damdev.moneybook.domain.History;
 import api.damdev.moneybook.dto.MoneyInfo;
 import api.damdev.moneybook.repository.MoneyRepo;
@@ -106,8 +107,16 @@ public class HistoryController {
 
   @DeleteMapping("{historyId}")
   public ResponseEntity deleteHistory(@PathVariable String historyId) {
-    History history = moneyRepo.findById(historyId).get();
-    log.info(history + "");
-    return new ResponseEntity(HttpStatus.OK);
+    log.info("내역 삭제");
+    History history = moneyRepo.findById(historyId).orElse(new History());
+
+    if (history.getId() == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    history.setActiveType(ActiveType.INACTIVE);
+    History deletedHistory = moneyRepo.save(history);
+
+    return ResponseEntity.ok(deletedHistory);
   }
 }
