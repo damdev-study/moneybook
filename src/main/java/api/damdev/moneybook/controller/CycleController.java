@@ -2,9 +2,14 @@ package api.damdev.moneybook.controller;
 
 import api.damdev.moneybook.domain.Cycle;
 import api.damdev.moneybook.dto.cycle.CycleInfo;
+import api.damdev.moneybook.dto.cycle.CycleParam;
 import api.damdev.moneybook.service.CycleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -52,9 +57,9 @@ public class CycleController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity viewListCycleData() {
-        List<Cycle> list = cycleService.findAllCycle();
+    public ResponseEntity viewListCycleData(Pageable pageable, CycleParam cycleParam) {
+        Page<Cycle> page = cycleService.findPageCycle(cycleParam, pageable);
 
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(page);
     }
 }

@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -57,8 +58,7 @@ public class CycleControllerTest {
         CycleInfo cycleInfo = setCycle("Update Cycle");
 
         //데이터 추가 필요
-        Cycle cycle = new Cycle(cycleInfo);
-        Cycle result = cycleRepo.save(cycle);
+        Cycle result = getCycleSave(cycleInfo);
 
         mockMvc.perform(put("/api/moneybook/cycle/{id}", result.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -73,8 +73,7 @@ public class CycleControllerTest {
     public void removeCycle() throws Exception {
         CycleInfo cycleInfo = setCycle("Delete Cycle");
 
-        Cycle cycle = new Cycle(cycleInfo);
-        Cycle result = cycleRepo.save(cycle);
+        Cycle result = getCycleSave(cycleInfo);
 
         mockMvc.perform(delete("/api/moneybook/cycle/{id}", result.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -85,24 +84,37 @@ public class CycleControllerTest {
         .andExpect(status().isOk());
     }
 
+
     @Test
     public void viewListCycle() throws Exception {
-        CycleInfo cycleInfo = setCycle("List Select Cycle");
 
-        Cycle cycle = new Cycle(cycleInfo);
-        cycleRepo.save(cycle);
+        for(int i=0;i<10;i++) {
+            CycleInfo cycleInfo = setCycle("List Select Cycle " + i);
+            getCycleSave(cycleInfo);
+        }
+
+        for(int i=0;i<10;i++) {
+            CycleInfo cycleInfo = setCycle("Page Select Cycle " + i);
+            getCycleSave(cycleInfo);
+        }
+
         mockMvc.perform(get("/api/moneybook/cycle/list")
+//                .param("page", "2")
+//                .param("size", "2")
+                .param("searchType", "2")
+                .param("cycleName", "Page")
+                .param("moneyType", MoneyType.INCOME.name())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
-                .andDo(print())
-                .andExpect(status().isOk());
+        .andDo(print())
+        .andExpect(status().isOk());
     }
 
     private CycleInfo setCycle(String cycleName) {
         CycleInfo cycleInfo = CycleInfo.builder()
                 .cycleName(cycleName)
-                .moneyType(MoneyType.INCOME)
+                .moneyType((int)(Math.random() * 2) == 1 ? MoneyType.INCOME : MoneyType.SPENDING)
                 .cycleStartDate(LocalDateTime.now())
                 .cycleEndDate(LocalDateTime.now())
                 .cycleYear(0)
@@ -115,6 +127,11 @@ public class CycleControllerTest {
 
 
         return cycleInfo;
+    }
+
+    private Cycle getCycleSave(CycleInfo cycleInfo) {
+        Cycle cycle = new Cycle(cycleInfo);
+        return cycleRepo.save(cycle);
     }
 
 }
