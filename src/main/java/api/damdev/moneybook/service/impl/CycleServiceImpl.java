@@ -60,15 +60,7 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public Page<Cycle> findPageCycle(CycleParam cycleParam, Pageable pageable) {
-//        Page<Cycle> page = cycleRepo.findAll(pageable);
-        Page<Cycle> page = null;
-
-        if(cycleParam.getSearchType() == 1) {
-            page = cycleRepo.findByCycleNameContains(cycleParam.getCycleName(), pageable);
-        } else if(cycleParam.getSearchType() == 2) {
-            page = cycleRepo.findByMoneyType(cycleParam.getMoneyType(), pageable);
-        }
-
+        Page<Cycle> page = cycleRepo.getUserList(cycleParam, pageable);
 
         return page;
     }
