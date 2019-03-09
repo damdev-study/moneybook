@@ -106,7 +106,7 @@ public class CycleControllerTest {
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
         .andDo(print())
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isOk());
     }
 
     @Test
