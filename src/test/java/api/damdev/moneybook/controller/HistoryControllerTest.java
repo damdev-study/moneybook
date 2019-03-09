@@ -1,5 +1,14 @@
 package api.damdev.moneybook.controller;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -8,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import api.damdev.moneybook.common.RestDocsConfiguration;
 import api.damdev.moneybook.common.type.MoneyType;
 import api.damdev.moneybook.domain.History;
 import api.damdev.moneybook.dto.MoneyInfo;
@@ -16,9 +26,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -32,6 +45,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 public class HistoryControllerTest {
 
   @Autowired
@@ -59,7 +74,41 @@ public class HistoryControllerTest {
       .andDo(print())
       .andExpect(status().isCreated())
       .andExpect(jsonPath("id").exists())
-      .andExpect(jsonPath("_links.self").exists());
+      .andExpect(jsonPath("_links.self").exists())
+      .andDo(document(
+        "reg-history",
+        links(
+          linkWithRel("self").description("link to self"),
+          linkWithRel("query-history").description("link to query events"),
+          linkWithRel("profile").description("link to profile")
+        ),
+        requestHeaders(
+          headerWithName(HttpHeaders.ACCEPT).description(MediaTypes.HAL_JSON),
+          headerWithName(HttpHeaders.CONTENT_TYPE).description(MediaType.APPLICATION_JSON_UTF8)
+        ),
+        requestFields(
+          fieldWithPath("userSeqId").description("유저 시퀀스 ID"),
+          fieldWithPath("moneyType").description("입력된 내역의 타입"),
+          fieldWithPath("category").description("카테고리"),
+          fieldWithPath("money").description("금액")
+        ),
+        responseHeaders(
+          headerWithName(HttpHeaders.LOCATION).description("location header"),
+          headerWithName(HttpHeaders.CONTENT_TYPE).description(MediaTypes.HAL_JSON_UTF8_VALUE)
+        ),
+        responseFields(
+          fieldWithPath("id").description("등록된 내역의 ID"),
+          fieldWithPath("moneyType").description("입력된 내역의 타입"),
+          fieldWithPath("category").description("카테고리"),
+          fieldWithPath("money").description("금액"),
+          fieldWithPath("activeType").description("내역의 상태"),
+          fieldWithPath("regDate").description("등록일"),
+          fieldWithPath("updateDate").description("수정일"),
+          fieldWithPath("_links.self.href").description("자기 자신"),
+          fieldWithPath("_links.query-history.href").description("등록된 내역 조회 API"),
+          fieldWithPath("_links.profile.href").description("프로필")
+        )
+      ));
   }
 
   @Test
@@ -214,10 +263,7 @@ public class HistoryControllerTest {
       .build();
     return moneyRepo.save(history);
   }
-  
-  
-  
-  
+
 //  @Test
 //  public void findAll() throws Exception{
 //
@@ -227,17 +273,16 @@ public class HistoryControllerTest {
 //    moneyInfo.setCategory("커피2");
 //    moneyInfo.setMoney(20000);
 //    moneyRepo.save(moneyInfo);
-//	    
+//
 //    mockMvc.perform(get("/api/moneybook/history/search")
 //        .contentType(MediaType.APPLICATION_JSON_UTF8)
 //        .accept(MediaTypes.HAL_JSON)
 //      ).andDo(print())
 //      .andExpect(status().isOk());
 //  }
-  
 
   @Test
-  public void findSearch() throws Exception{
+  public void findSearch() throws Exception {
 
     History moneyInfo = new History();
 //    moneyInfo.setUserSeqId("2");
@@ -245,14 +290,13 @@ public class HistoryControllerTest {
     moneyInfo.setCategory("커피3");
     moneyInfo.setMoney(20000);
     moneyRepo.save(moneyInfo);
-	    
+
     mockMvc.perform(get("/api/moneybook/history/list")
-    		.param("target", "category")
-    		.param("query", "3")
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
-        .accept(MediaTypes.HAL_JSON)
-      ).andDo(print())
+      .param("target", "category")
+      .param("query", "3")
+      .contentType(MediaType.APPLICATION_JSON_UTF8)
+      .accept(MediaTypes.HAL_JSON)
+    ).andDo(print())
       .andExpect(status().isOk());
   }
-
 }
