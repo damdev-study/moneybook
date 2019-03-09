@@ -1,5 +1,6 @@
 package api.damdev.moneybook.repository.dsl.impl;
 
+import api.damdev.moneybook.common.type.ActiveType;
 import api.damdev.moneybook.domain.Cycle;
 import api.damdev.moneybook.domain.QCycle;
 import api.damdev.moneybook.dto.cycle.CycleParam;
@@ -31,6 +32,7 @@ public class CycleRepoImpl extends QuerydslRepositorySupport implements CycleRep
         QCycle cycle = QCycle.cycle;
 
         JPAQuery query = queryFactory.from(cycle)
+                .where(cycle.active.eq(ActiveType.ACITVE))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 

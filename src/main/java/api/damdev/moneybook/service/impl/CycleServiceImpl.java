@@ -67,7 +67,7 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public Cycle findById(String id) {
-        Cycle cycle = cycleRepo.findById(id).orElse(new Cycle());
+        Cycle cycle = cycleRepo.getOne(id);
 
         return cycle;
     }
