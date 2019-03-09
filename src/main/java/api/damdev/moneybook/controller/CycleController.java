@@ -54,6 +54,10 @@ public class CycleController {
     public ResponseEntity removeCycle(@PathVariable("cycleId") String id) {
         Cycle cycle = cycleService.deleteCycle(id);
 
+        if(Strings.isNullOrEmpty(cycle.getId())) {
+            return ResponseEntity.badRequest().build();
+        }
+
         return ResponseEntity.ok().build();
     }
 

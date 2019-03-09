@@ -6,6 +6,7 @@ import api.damdev.moneybook.dto.cycle.CycleInfo;
 import api.damdev.moneybook.dto.cycle.CycleParam;
 import api.damdev.moneybook.repository.CycleRepo;
 import api.damdev.moneybook.service.CycleService;
+import com.google.common.base.Strings;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,8 +36,6 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public Cycle updateCycle(CycleInfo addInfo, String id) {
-//        Cycle entity = new Cycle(addInfo, id);
-
         Cycle entity = modelMapper.map(addInfo, Cycle.class);
         entity.setId(id);
 
@@ -45,7 +44,12 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public Cycle deleteCycle(String id) {
-        Cycle entity = cycleRepo.getOne(id);
+        Cycle entity = cycleRepo.findById(id).orElse(new Cycle());
+
+        if(Strings.isNullOrEmpty(entity.getId())) {
+            return entity;
+        }
+
         entity.setActive(ActiveType.INACTIVE);
 
         return cycleRepo.save(entity);
