@@ -65,17 +65,14 @@ public class CycleController {
     }
 
     @GetMapping("{cycleId}")
-    public ResponseEntity viewCycleDetail(@PathVariable("cycleId") String id, Errors errors) {
+    public ResponseEntity viewCycleDetail(@PathVariable("cycleId") String id) {
         System.out.println("controller : "+id);
-//        if(errors.hasErrors()) {
-//            return ResponseEntity.badRequest().body(errors);
-//        }
 
         Cycle cycle = cycleService.findById(id);
 
-//        if(Strings.isNullOrEmpty(cycle.getId())) {
-//            return ResponseEntity.badRequest().body(errors);
-//        }
+        if(Strings.isNullOrEmpty(cycle.getId())) {
+            return ResponseEntity.badRequest().build();
+        }
 
         return ResponseEntity.ok(cycle);
     }
