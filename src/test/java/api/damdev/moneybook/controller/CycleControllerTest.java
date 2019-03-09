@@ -81,6 +81,22 @@ public class CycleControllerTest {
     }
 
     @Test
+    public void modifyCycleBadRequest() throws Exception {
+        CycleInfo cycleInfo = new CycleInfo();
+
+        //데이터 추가 필요
+        Cycle result = getCycleSave(cycleInfo);
+
+        mockMvc.perform(put("/api/moneybook/cycle/{id}", "nothing")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(cycleInfo))
+        )
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void removeCycle() throws Exception {
         CycleInfo cycleInfo = setCycle("Delete Cycle");
 
@@ -93,6 +109,21 @@ public class CycleControllerTest {
         )
         .andDo(print())
         .andExpect(status().isOk());
+    }
+
+    @Test
+    public void removeCycleBadRequest() throws Exception {
+        CycleInfo cycleInfo = setCycle("Delete Cycle");
+
+        Cycle result = getCycleSave(cycleInfo);
+
+        mockMvc.perform(delete("/api/moneybook/cycle/{id}", "nothing")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(cycleInfo))
+        )
+        .andDo(print())
+        .andExpect(status().isBadRequest());
     }
 
 
@@ -123,6 +154,32 @@ public class CycleControllerTest {
     }
 
     @Test
+    public void viewListCycleBadRequest() throws Exception {
+
+        for(int i=0;i<10;i++) {
+            CycleInfo cycleInfo = setCycle("List Select Cycle " + i);
+            getCycleSave(cycleInfo);
+        }
+
+        for(int i=0;i<10;i++) {
+            CycleInfo cycleInfo = setCycle("Page Select Cycle " + i);
+            getCycleSave(cycleInfo);
+        }
+
+        mockMvc.perform(get("/api/moneybook/cycle/list")
+//                .param("page", "2")
+//                .param("size", "2")
+                .param("cycleName", "Unit") // 존재하지 않는 값
+                .param("moneyType", "NOTHING") // 존재하지 않는 값
+                .param("cycleType", "NOTHING") // 존재하지 않는 값
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void viewCycleDetail() throws Exception {
         CycleInfo cycleInfo = setCycle("Select Cycle");
 
@@ -135,6 +192,22 @@ public class CycleControllerTest {
         )
         .andDo(print())
         .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void viewCycleDetailBadRequest() throws Exception {
+        CycleInfo cycleInfo = setCycle("Select Cycle");
+
+        Cycle result = getCycleSave(cycleInfo);
+
+        mockMvc.perform(get("/api/moneybook/cycle/{id}", "nothing")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(cycleInfo))
+        )
+                .andDo(print())
+                .andExpect(status().isOk());
 
     }
 
