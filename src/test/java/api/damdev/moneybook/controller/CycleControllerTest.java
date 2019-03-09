@@ -101,14 +101,14 @@ public class CycleControllerTest {
         mockMvc.perform(get("/api/moneybook/cycle/list")
 //                .param("page", "2")
 //                .param("size", "2")
-                .param("searchType", "2")
-                .param("cycleName", "Page")
+                .param("cycleName", "1")
                 .param("moneyType", MoneyType.INCOME.name())
+                .param("cycleType", CycleType.UNIT.name())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
         .andDo(print())
-        .andExpect(status().isOk());
+        .andExpect(status().isBadRequest());
     }
 
     private CycleInfo setCycle(String cycleName) {
@@ -121,7 +121,7 @@ public class CycleControllerTest {
                 .cycleMonth(3)
                 .cycleDate(0)
                 .cycleDayOfWeek(DayOfWeek.SAT)
-                .cycleType(CycleType.FIXED)
+                .cycleType((int)(Math.random() * 2) == 1 ? CycleType.FIXED : CycleType.UNIT)
                 .active(ActiveType.ACITVE)
                 .build();
 

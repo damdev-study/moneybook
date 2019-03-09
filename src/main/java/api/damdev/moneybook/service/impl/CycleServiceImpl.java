@@ -63,12 +63,13 @@ public class CycleServiceImpl implements CycleService {
 //        Page<Cycle> page = cycleRepo.findAll(pageable);
         Page<Cycle> page = null;
 
-        if(cycleParam.getSearchType() == 1) {
-            page = cycleRepo.findByCycleNameContains(cycleParam.getCycleName(), pageable);
-        } else if(cycleParam.getSearchType() == 2) {
-            page = cycleRepo.findByMoneyType(cycleParam.getMoneyType(), pageable);
-        }
+//        if(cycleParam.getSearchType() == 1) {
+//            page = cycleRepo.findByCycleNameContains(cycleParam.getCycleName(), pageable);
+//        } else if(cycleParam.getSearchType() == 2) {
+//            page = cycleRepo.findByMoneyType(cycleParam.getMoneyType(), pageable);
+//        }
 
+        page = cycleRepo.getUserList(cycleParam, pageable);
 
         return page;
     }

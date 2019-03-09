@@ -17,9 +17,9 @@ public class CycleParam {
     private int searchType;
     private String cycleName;
     private MoneyType moneyType;
-//    private LocalDateTime cycleStartDateStart;
-//    private LocalDateTime cycleStartDateEnd;
-//    private LocalDateTime cycleEndDateStart;
-//    private LocalDateTime cycleEndDateEnd;
-//    private String cycleType;
+    private LocalDateTime cycleStartDateStart;
+    private LocalDateTime cycleStartDateEnd;
+    private LocalDateTime cycleEndDateStart;
+    private LocalDateTime cycleEndDateEnd;
+    private CycleType cycleType;
 }
