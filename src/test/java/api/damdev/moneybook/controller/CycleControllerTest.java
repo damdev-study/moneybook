@@ -109,6 +109,24 @@ public class CycleControllerTest {
         .andExpect(status().isBadRequest());
     }
 
+    @Test
+    public void viewCycleDetail() throws Exception {
+        CycleInfo cycleInfo = setCycle("Select Cycle");
+
+        Cycle result = getCycleSave(cycleInfo);
+
+        System.out.println(result.toString());
+
+        mockMvc.perform(get("/api/moneybook/cycle/{id}", result.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(cycleInfo))
+        )
+        .andDo(print())
+        .andExpect(status().isOk());
+
+    }
+
     private CycleInfo setCycle(String cycleName) {
         CycleInfo cycleInfo = CycleInfo.builder()
                 .cycleName(cycleName)

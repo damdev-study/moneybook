@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CycleService {
     Cycle insertCycle(CycleInfo addInfo);
@@ -18,4 +19,6 @@ public interface CycleService {
     List<Cycle> findAllCycle();
 
     Page<Cycle> findPageCycle(CycleParam param, Pageable pageable);
+
+    Cycle findById(String id);
 }

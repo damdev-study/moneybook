@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 @Service("cycleService")
 public class CycleServiceImpl implements CycleService {
@@ -63,5 +64,12 @@ public class CycleServiceImpl implements CycleService {
         Page<Cycle> page = cycleRepo.getUserList(cycleParam, pageable);
 
         return page;
+    }
+
+    @Override
+    public Cycle findById(String id) {
+        Cycle cycle = cycleRepo.findById(id).orElse(new Cycle());
+
+        return cycle;
     }
 }
