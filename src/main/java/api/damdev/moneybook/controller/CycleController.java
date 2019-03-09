@@ -66,8 +66,6 @@ public class CycleController {
 
     @GetMapping("{cycleId}")
     public ResponseEntity viewCycleDetail(@PathVariable("cycleId") String id) {
-        System.out.println("controller : "+id);
-
         Cycle cycle = cycleService.findById(id);
 
         if(Strings.isNullOrEmpty(cycle.getId())) {
