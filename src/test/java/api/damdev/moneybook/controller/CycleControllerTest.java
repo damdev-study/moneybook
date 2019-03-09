@@ -52,6 +52,19 @@ public class CycleControllerTest {
     }
 
     @Test
+    public void addCycleDataBadRequest() throws Exception {
+        CycleInfo cycleInfo = new CycleInfo();
+
+        mockMvc.perform(post("/api/moneybook/cycle")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(cycleInfo))
+        )
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void modifyCycle() throws Exception {
         CycleInfo cycleInfo = setCycle("Update Cycle");
 
