@@ -4,6 +4,7 @@ import api.damdev.moneybook.domain.Cycle;
 import api.damdev.moneybook.dto.cycle.CycleInfo;
 import api.damdev.moneybook.dto.cycle.CycleParam;
 import api.damdev.moneybook.service.CycleService;
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -56,10 +57,21 @@ public class CycleController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/list")
+    @GetMapping("list")
     public ResponseEntity viewListCycleData(Pageable pageable, CycleParam cycleParam) {
         Page<Cycle> page = cycleService.findPageCycle(cycleParam, pageable);
 
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("{cycleId}")
+    public ResponseEntity viewCycleDetail(@PathVariable("cycleId") String id) {
+        Cycle cycle = cycleService.findById(id);
+
+        if(Strings.isNullOrEmpty(cycle.getId())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(cycle);
     }
 }

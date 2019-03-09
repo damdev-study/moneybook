@@ -18,4 +18,6 @@ public interface CycleService {
     List<Cycle> findAllCycle();
 
     Page<Cycle> findPageCycle(CycleParam param, Pageable pageable);
+
+    Cycle findById(String id);
 }

@@ -64,4 +64,11 @@ public class CycleServiceImpl implements CycleService {
 
         return page;
     }
+
+    @Override
+    public Cycle findById(String id) {
+        Cycle cycle = cycleRepo.findById(id).orElse(new Cycle());
+
+        return cycle;
+    }
 }
