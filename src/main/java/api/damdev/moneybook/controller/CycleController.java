@@ -31,12 +31,12 @@ public class CycleController {
 
     @PostMapping
     public ResponseEntity addCycleData(@RequestBody @Valid CycleInfo info, Errors errors) {
+        //날짜 비교
+        CommonUtils.dateDiff(info.getCycleStartDate(), info.getCycleEndDate(), errors);
+
+        //날짜 비교 후 errors 값 노출
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(errors);
-        }
-
-        if(!CommonUtils.dateDiff(info.getCycleStartDate(), info.getCycleEndDate())) {
-            return ResponseEntity.badRequest().build();
         }
 
         Cycle cycle = cycleService.insertCycle(info);
