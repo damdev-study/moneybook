@@ -32,7 +32,7 @@ public class CycleControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Resource
+    @Autowired
     CycleRepo cycleRepo;
 
     @Autowired
@@ -84,9 +84,6 @@ public class CycleControllerTest {
     public void modifyCycleBadRequest() throws Exception {
         CycleInfo cycleInfo = new CycleInfo();
 
-        //데이터 추가 필요
-        Cycle result = getCycleSave(cycleInfo);
-
         mockMvc.perform(put("/api/moneybook/cycle/{id}", "nothing")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -114,8 +111,6 @@ public class CycleControllerTest {
     @Test
     public void removeCycleBadRequest() throws Exception {
         CycleInfo cycleInfo = setCycle("Delete Cycle");
-
-        Cycle result = getCycleSave(cycleInfo);
 
         mockMvc.perform(delete("/api/moneybook/cycle/{id}", "nothing")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -199,15 +194,13 @@ public class CycleControllerTest {
     public void viewCycleDetailBadRequest() throws Exception {
         CycleInfo cycleInfo = setCycle("Select Cycle");
 
-        Cycle result = getCycleSave(cycleInfo);
-
         mockMvc.perform(get("/api/moneybook/cycle/{id}", "nothing")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(cycleInfo))
         )
-                .andDo(print())
-                .andExpect(status().isOk());
+        .andDo(print())
+        .andExpect(status().isOk());
 
     }
 
