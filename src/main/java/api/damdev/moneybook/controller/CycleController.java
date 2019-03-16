@@ -4,6 +4,7 @@ import api.damdev.moneybook.domain.Cycle;
 import api.damdev.moneybook.dto.cycle.CycleInfo;
 import api.damdev.moneybook.dto.cycle.CycleParam;
 import api.damdev.moneybook.service.CycleService;
+import api.damdev.moneybook.util.CommonUtils;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,10 @@ public class CycleController {
 
     @PostMapping
     public ResponseEntity addCycleData(@RequestBody @Valid CycleInfo info, Errors errors) {
+        //날짜 비교
+        CommonUtils.dateDiff(info.getCycleStartDate(), info.getCycleEndDate(), errors);
+
+        //날짜 비교 후 errors 값 노출
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(errors);
         }

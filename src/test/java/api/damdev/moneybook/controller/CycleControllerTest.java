@@ -130,7 +130,7 @@ public class CycleControllerTest {
                 .cycleName(cycleName)
                 .moneyType((int)(Math.random() * 2) == 1 ? MoneyType.INCOME : MoneyType.SPENDING)
                 .cycleStartDate(LocalDateTime.now())
-                .cycleEndDate(LocalDateTime.now())
+                .cycleEndDate(LocalDateTime.now().plusDays(1))
                 .cycleYear(0)
                 .cycleMonth(3)
                 .cycleDate(0)
