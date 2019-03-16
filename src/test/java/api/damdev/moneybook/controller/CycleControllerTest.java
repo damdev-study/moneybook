@@ -200,7 +200,7 @@ public class CycleControllerTest {
                 .content(objectMapper.writeValueAsString(cycleInfo))
         )
         .andDo(print())
-        .andExpect(status().isOk());
+        .andExpect(status().isBadRequest());
 
     }
 
