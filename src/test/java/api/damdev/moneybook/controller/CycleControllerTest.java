@@ -7,6 +7,7 @@ import api.damdev.moneybook.common.type.MoneyType;
 import api.damdev.moneybook.domain.Cycle;
 import api.damdev.moneybook.dto.cycle.CycleInfo;
 import api.damdev.moneybook.repository.CycleRepo;
+import api.damdev.moneybook.util.CommonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -97,11 +98,11 @@ public class CycleControllerTest {
         }
 
         mockMvc.perform(get("/api/moneybook/cycle/list")
-//                .param("page", "2")
-//                .param("size", "2")
-                .param("cycleName", "1")
-                .param("moneyType", MoneyType.INCOME.name())
-                .param("cycleType", CycleType.UNIT.name())
+                .param("page", "2")
+                .param("size", "2")
+//                .param("cycleName", "List")
+//                .param("moneyType", MoneyType.INCOME.name())
+//                .param("cycleType", CycleType.UNIT.name())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
@@ -129,6 +130,8 @@ public class CycleControllerTest {
         CycleInfo cycleInfo = CycleInfo.builder()
                 .cycleName(cycleName)
                 .moneyType((int)(Math.random() * 2) == 1 ? MoneyType.INCOME : MoneyType.SPENDING)
+                .changeMoney((int)(Math.random() * 10000000))
+//                .userSeqId("1234")
                 .cycleStartDate(LocalDateTime.now())
                 .cycleEndDate(LocalDateTime.now().plusDays(1))
                 .cycleYear(0)

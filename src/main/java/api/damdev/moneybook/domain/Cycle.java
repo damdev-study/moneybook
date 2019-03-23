@@ -28,13 +28,12 @@ public class Cycle {
     private String id;
     private String cycleName;
 
-    @ManyToOne
-    private UserInfo user;
+    private String userSeqId;
 
-//    @Basic(optional = false)
-//    @Column(name = "moneyType", columnDefinition = "enum('SPENDING','INCOME')")
     @Enumerated(value = EnumType.STRING)
     private MoneyType moneyType;
+
+    private Integer changeMoney;
 
     @CreationTimestamp
     private LocalDateTime regDate;
@@ -59,16 +58,18 @@ public class Cycle {
     private ActiveType active = ActiveType.ACITVE;
 
     public Cycle(CycleInfo addInfo) {
-       this.cycleName = addInfo.getCycleName();
-       this.moneyType = addInfo.getMoneyType();
-       this.cycleStartDate = addInfo.getCycleStartDate();
-       this.cycleEndDate = addInfo.getCycleEndDate();
-       this.cycleYear = addInfo.getCycleYear();
-       this.cycleMonth = addInfo.getCycleMonth();
-       this.cycleDate = addInfo.getCycleDate();
-       this.cycleDayOfWeek = addInfo.getCycleDayOfWeek();
-       this.cycleType = addInfo.getCycleType();
-       this.active = addInfo.getActive();
+        this.cycleName = addInfo.getCycleName();
+        this.moneyType = addInfo.getMoneyType();
+        this.changeMoney = addInfo.getChangeMoney();
+        this.cycleStartDate = addInfo.getCycleStartDate();
+        this.cycleEndDate = addInfo.getCycleEndDate();
+        this.cycleYear = addInfo.getCycleYear();
+        this.cycleMonth = addInfo.getCycleMonth();
+        this.cycleDate = addInfo.getCycleDate();
+        this.cycleDayOfWeek = addInfo.getCycleDayOfWeek();
+        this.cycleType = addInfo.getCycleType();
+        this.active = addInfo.getActive();
+        this.userSeqId = addInfo.getUserSeqId();
     }
 
     public Cycle(CycleInfo addInfo, String id) {
