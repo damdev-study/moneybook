@@ -33,6 +33,7 @@ public class CycleRepoImpl extends QuerydslRepositorySupport implements CycleRep
 
         JPAQuery query = queryFactory.from(cycle)
                 .where(cycle.active.eq(ActiveType.ACITVE))
+                .where(cycle.userSeqId.eq(cycleParam.getUserSeqId()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
