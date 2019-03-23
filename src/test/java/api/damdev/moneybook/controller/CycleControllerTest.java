@@ -87,12 +87,12 @@ public class CycleControllerTest {
     @Test
     public void viewListCycle() throws Exception {
 
-        for(int i=0;i<10;i++) {
+        for(int i=0;i<20;i++) {
             CycleInfo cycleInfo = setCycle("List Select Cycle " + i);
             getCycleSave(cycleInfo);
         }
 
-        for(int i=0;i<10;i++) {
+        for(int i=0;i<20;i++) {
             CycleInfo cycleInfo = setCycle("Page Select Cycle " + i);
             getCycleSave(cycleInfo);
         }
@@ -100,6 +100,7 @@ public class CycleControllerTest {
         mockMvc.perform(get("/api/moneybook/cycle/list")
                 .param("page", "2")
                 .param("size", "2")
+                .param("userSeqId", "1234")
                 .param("cycleName", "List")
                 .param("moneyType", MoneyType.INCOME.name())
                 .param("cycleType", CycleType.UNIT.name())
@@ -108,6 +109,33 @@ public class CycleControllerTest {
         )
         .andDo(print())
         .andExpect(status().isOk());
+    }
+
+    @Test
+    public void viewListCycle_EmptyUserSeqId() throws Exception {
+
+        for(int i=0;i<20;i++) {
+            CycleInfo cycleInfo = setCycle("List Select Cycle " + i);
+            getCycleSave(cycleInfo);
+        }
+
+        for(int i=0;i<20;i++) {
+            CycleInfo cycleInfo = setCycle("Page Select Cycle " + i);
+            getCycleSave(cycleInfo);
+        }
+
+        mockMvc.perform(get("/api/moneybook/cycle/list")
+                .param("page", "2")
+                .param("size", "2")
+//                .param("userSeqId", "1234")
+                .param("cycleName", "List")
+                .param("moneyType", MoneyType.INCOME.name())
+                .param("cycleType", CycleType.UNIT.name())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+        .andDo(print())
+        .andExpect(status().isBadRequest());
     }
 
     @Test
