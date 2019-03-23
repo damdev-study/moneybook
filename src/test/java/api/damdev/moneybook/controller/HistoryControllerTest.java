@@ -63,8 +63,8 @@ public class HistoryControllerTest {
     MoneyInfo moneyInfo = MoneyInfo.builder()
       .userSeqId("1")
       .moneyType(MoneyType.INCOME)
-      .money(10000)
-      .category("커피")
+      .changeMoney(10000)
+      .category("용돈")
       .build();
 
     mockMvc.perform(post("/api/moneybook/history")
@@ -163,7 +163,7 @@ public class HistoryControllerTest {
     // Given
     History getHistory = generateHistory(100);
     MoneyInfo moneyInfo = MoneyInfo.builder()
-      .money(1000)
+      .changeMoney(1000)
       .moneyType(MoneyType.INCOME)
       .category("카테고리")
       .build();
@@ -184,7 +184,7 @@ public class HistoryControllerTest {
   @Test
   public void updateHistory404() throws Exception {
     MoneyInfo moneyInfo = MoneyInfo.builder()
-      .money(1000)
+      .changeMoney(1000)
       .moneyType(MoneyType.INCOME)
       .category("카테고리")
       .build();
@@ -221,7 +221,7 @@ public class HistoryControllerTest {
     // Given
     History getHistory = generateHistory(100);
     MoneyInfo moneyInfo = MoneyInfo.builder()
-      .money(-1000)
+      .changeMoney(-1000)
       .moneyType(MoneyType.INCOME)
       .category("카테고리")
       .build();
@@ -257,7 +257,7 @@ public class HistoryControllerTest {
 
   private History generateHistory(int index) {
     History history = History.builder()
-      .money(index + 1000)
+      .changeMoney(index + 1000)
       .category("카테고리")
       .moneyType(index % 2 == 0 ? MoneyType.INCOME : MoneyType.SPENDING)
       .build();
@@ -288,7 +288,7 @@ public class HistoryControllerTest {
 //    moneyInfo.setUserSeqId("2");
     moneyInfo.setMoneyType(MoneyType.INCOME);
     moneyInfo.setCategory("커피3");
-    moneyInfo.setMoney(20000);
+    moneyInfo.setChangeMoney(20000);
     moneyRepo.save(moneyInfo);
 
     mockMvc.perform(get("/api/moneybook/history/list")
