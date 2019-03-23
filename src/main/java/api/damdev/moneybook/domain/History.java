@@ -43,7 +43,7 @@ public class History {
 
   private String category;
 
-  private int money;
+  private int changeMoney;
 
   private ActiveType activeType = ActiveType.ACITVE;
 
@@ -52,4 +52,6 @@ public class History {
 
   @UpdateTimestamp
   private LocalDateTime updateDate;
+
+  private int totalMoney;
 }

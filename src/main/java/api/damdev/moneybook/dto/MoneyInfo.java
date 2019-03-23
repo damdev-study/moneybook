@@ -29,5 +29,5 @@ public class MoneyInfo {
   private String category;
 
   @Min(0)
-  private int money;
+  private int changeMoney;
 }
