@@ -7,6 +7,7 @@ import api.damdev.moneybook.domain.History;
 import api.damdev.moneybook.dto.MoneyInfo;
 import api.damdev.moneybook.repository.MoneyRepo;
 import api.damdev.moneybook.resources.HistoryResource;
+import api.damdev.moneybook.util.CommonUtils;
 import java.net.URI;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -54,9 +55,15 @@ public class HistoryController {
   @PostMapping
   public ResponseEntity regHistory(@RequestBody @Valid MoneyInfo moneyInfo, Errors errors) {
     if (errors.hasErrors()) {
-      return ResponseEntity.badRequest().body(errors);
+      return badRequest(errors);
     }
     History history = modelMapper.map(moneyInfo, History.class);
+
+    CommonUtils.checkTotalMoney(moneyInfo, history, errors);
+    if (errors.hasErrors()) {
+      return badRequest(errors);
+    }
+
     History newHistory = this.moneyRepo.save(history);
     if (newHistory.getId() == null) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -116,10 +123,15 @@ public class HistoryController {
     }
 
     if (errors.hasErrors()) {
-      return ResponseEntity.badRequest().body(errors);
+      return badRequest(errors);
     }
 
     History changeHistory = modelMapper.map(moneyInfo, History.class);
+
+    CommonUtils.checkTotalMoney(moneyInfo, changeHistory, errors);
+    if (errors.hasErrors()) {
+      return badRequest(errors);
+    }
     changeHistory.setId(historyId);
 
     History changedHistory = moneyRepo.save(changeHistory);
@@ -143,5 +155,9 @@ public class HistoryController {
     History deletedHistory = moneyRepo.save(history);
 
     return ResponseEntity.ok(deletedHistory);
+  }
+
+  private ResponseEntity<Errors> badRequest(Errors errors) {
+    return ResponseEntity.badRequest().body(errors);
   }
 }
