@@ -90,7 +90,7 @@ public class HistoryControllerTest {
           fieldWithPath("userSeqId").description("유저 시퀀스 ID"),
           fieldWithPath("moneyType").description("입력된 내역의 타입"),
           fieldWithPath("category").description("카테고리"),
-          fieldWithPath("money").description("금액")
+          fieldWithPath("changeMoney").description("금액")
         ),
         responseHeaders(
           headerWithName(HttpHeaders.LOCATION).description("location header"),
@@ -100,8 +100,9 @@ public class HistoryControllerTest {
           fieldWithPath("id").description("등록된 내역의 ID"),
           fieldWithPath("moneyType").description("입력된 내역의 타입"),
           fieldWithPath("category").description("카테고리"),
-          fieldWithPath("money").description("금액"),
+          fieldWithPath("changeMoney").description("금액"),
           fieldWithPath("activeType").description("내역의 상태"),
+          fieldWithPath("totalMoney").description("현재 금액"),
           fieldWithPath("regDate").description("등록일"),
           fieldWithPath("updateDate").description("수정일"),
           fieldWithPath("_links.self.href").description("자기 자신"),
@@ -176,7 +177,7 @@ public class HistoryControllerTest {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(jsonPath("id").exists())
-      .andExpect(jsonPath("money").exists())
+      .andExpect(jsonPath("changeMoney").exists())
       .andExpect(jsonPath("moneyType").exists())
       .andExpect(jsonPath("category").exists());
   }
