@@ -100,6 +100,7 @@ public class HistoryControllerTest {
         ),
         responseFields(
           fieldWithPath("id").description("등록된 내역의 ID"),
+          fieldWithPath("userSeqId").description("유저 시퀀스 ID"),
           fieldWithPath("moneyType").description("입력된 내역의 타입"),
           fieldWithPath("category").description("카테고리"),
           fieldWithPath("changeMoney").description("금액"),
