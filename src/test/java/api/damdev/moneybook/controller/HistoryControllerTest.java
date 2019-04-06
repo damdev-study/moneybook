@@ -9,6 +9,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -293,12 +294,12 @@ public class HistoryControllerTest {
           headerWithName(HttpHeaders.ACCEPT).description(MediaTypes.HAL_JSON),
           headerWithName(HttpHeaders.CONTENT_TYPE).description(MediaType.APPLICATION_JSON_UTF8)
         ),
-        requestFields(
-          fieldWithPath("userSeqId").description("유저 시퀀스 ID"),
-          fieldWithPath("moneyType").description("입력된 내역의 타입"),
-          fieldWithPath("category").description("카테고리"),
-          fieldWithPath("startDate").description("조회 시작 일자"),
-          fieldWithPath("endDate").description("조회 종료 일자")
+        requestParameters(
+          parameterWithName("userSeqId").description("유저 시퀀스 ID"),
+          parameterWithName("moneyType").description("입력된 내역의 타입"),
+          parameterWithName("category").description("카테고리"),
+          parameterWithName("startDate").description("조회 시작 일자"),
+          parameterWithName("endDate").description("조회 종료 일자")
         ),
         responseHeaders(
           headerWithName(HttpHeaders.LOCATION).description("location header"),
