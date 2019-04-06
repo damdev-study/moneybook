@@ -17,6 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Random;
+
 import api.damdev.moneybook.common.RestDocsConfiguration;
 import api.damdev.moneybook.common.type.MoneyType;
 import api.damdev.moneybook.domain.History;
@@ -264,39 +266,58 @@ public class HistoryControllerTest {
     return moneyRepo.save(history);
   }
 
-//  @Test
-//  public void findAll() throws Exception{
-//
-//    History moneyInfo = new History();
-////    moneyInfo.setUserSeqId("2");
-//    moneyInfo.setMoneyType(MoneyType.INCOME);
-//    moneyInfo.setCategory("커피2");
-//    moneyInfo.setMoney(20000);
-//    moneyRepo.save(moneyInfo);
-//
-//    mockMvc.perform(get("/api/moneybook/history/search")
-//        .contentType(MediaType.APPLICATION_JSON_UTF8)
-//        .accept(MediaTypes.HAL_JSON)
-//      ).andDo(print())
-//      .andExpect(status().isOk());
-//  }
-
   @Test
-  public void findSearch() throws Exception {
+  public void findSearcsh() throws Exception {
 
-    History moneyInfo = new History();
+    for ( int i=0; i<20;i++) {
+    	History moneyInfo = new History();
 //    moneyInfo.setUserSeqId("2");
-    moneyInfo.setMoneyType(MoneyType.INCOME);
-    moneyInfo.setCategory("커피3");
-    moneyInfo.setChangeMoney(20000);
-    moneyRepo.save(moneyInfo);
+    	moneyInfo.setMoneyType(MoneyType.INCOME);
+    	moneyInfo.setChangeMoney(new Random().nextInt(10000));
+    	moneyInfo.setCategory("커피"+moneyInfo.getChangeMoney());
+    	moneyRepo.save(moneyInfo);
+    }
 
-    mockMvc.perform(get("/api/moneybook/history/list")
-      .param("target", "category")
-      .param("query", "3")
-      .contentType(MediaType.APPLICATION_JSON_UTF8)
-      .accept(MediaTypes.HAL_JSON)
-    ).andDo(print())
-      .andExpect(status().isOk());
+    mockMvc.perform(
+      get("/api/moneybook/history/list")
+        .param("category", "커피1")
+        .param("sort", "category,desc")
+        .accept(MediaTypes.HAL_JSON)
+    )
+    .andDo(print())
+    .andExpect(status().isOk())
+    .andDo(document(
+        "historyList", 
+        requestHeaders(
+          headerWithName(HttpHeaders.ACCEPT).description(MediaTypes.HAL_JSON),
+          headerWithName(HttpHeaders.CONTENT_TYPE).description(MediaType.APPLICATION_JSON_UTF8)
+        ),
+        requestFields(
+          fieldWithPath("userSeqId").description("유저 시퀀스 ID"),
+          fieldWithPath("moneyType").description("입력된 내역의 타입"),
+          fieldWithPath("category").description("카테고리"),
+          fieldWithPath("startDate").description("조회 시작 일자"),
+          fieldWithPath("endDate").description("조회 종료 일자")
+        ),
+        responseHeaders(
+          headerWithName(HttpHeaders.LOCATION).description("location header"),
+          headerWithName(HttpHeaders.CONTENT_TYPE).description(MediaTypes.HAL_JSON_UTF8_VALUE)
+        ),
+        responseFields(
+          fieldWithPath("id").description("등록된 내역의 ID"),
+          fieldWithPath("userSeqId").description("유저 시퀀스 ID"),
+          fieldWithPath("moneyType").description("입력된 내역의 타입"),
+          fieldWithPath("category").description("카테고리"),
+          fieldWithPath("activeType").description("내역의 상태"),
+          fieldWithPath("regDate").description("등록일"),
+          fieldWithPath("updateDate").description("수정일"),
+          fieldWithPath("changeMoney").description("금액"),
+          fieldWithPath("totalMoney").description("잔액")/*,
+          fieldWithPath("_links.self.href").description("자기 자신"),
+          fieldWithPath("_links.query-history.href").description("등록된 내역 조회 API"),
+          fieldWithPath("_links.profile.href").description("프로필")*/
+        )))
+    ;
+    
   }
 }

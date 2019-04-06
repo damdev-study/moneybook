@@ -5,15 +5,14 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import api.damdev.moneybook.common.type.ActiveType;
 import api.damdev.moneybook.domain.History;
 import api.damdev.moneybook.dto.MoneyInfo;
+import api.damdev.moneybook.dto.MoneyParam;
 import api.damdev.moneybook.repository.MoneyRepo;
 import api.damdev.moneybook.resources.HistoryResource;
 import java.net.URI;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -68,28 +66,10 @@ public class HistoryController {
     return ResponseEntity.created(createURL).body(historyResource);
   }
 
-//  @GetMapping("search")
-//  public ResponseEntity getHistoryList() {
-//    Page<History> history = moneyRepo.findAll(PageRequest.of(0, 10));
-//    return ResponseEntity.ok(history);
-//  }
-
   @GetMapping("list")
-  public ResponseEntity search(@RequestParam(defaultValue = "", required = false) String query,
-    @RequestParam(defaultValue = "category", required = false) String target,
-    @RequestParam(defaultValue = "0", required = false) Integer pageNum,
-    @RequestParam(defaultValue = "10", required = false) Integer pageSize,
-    @RequestParam(defaultValue = "category", required = false) String sortTarget,
-    @RequestParam(defaultValue = "0", required = false) Integer sortReverse) {
-    PageRequest page = PageRequest.of(pageNum, pageSize,
-      sortReverse == 1 ? Sort.by(sortTarget).descending() : Sort.by(sortTarget).ascending());
-    Page<History> list = null;
-    log.warn("tttttttttttttttttarget : " + target + ", query : " + query);
-    if (target.equals("category")) {
-      list = moneyRepo.findByCategory(query, page);
-    }
+  public ResponseEntity search(Pageable pageable, MoneyParam param) {
 
-    return ResponseEntity.ok(list);
+    return ResponseEntity.ok(moneyRepo.getList(param, pageable));
   }
 
   @GetMapping("{historyId}")
