@@ -21,6 +21,10 @@ public class CycleInfo {
     private String cycleName;
     @NotNull
     private MoneyType moneyType;
+    @NotNull
+    private Integer changeMoney;
+//    @NotNull
+    private String userSeqId;
     private LocalDateTime cycleStartDate;
     private LocalDateTime cycleEndDate;
     private int cycleYear;

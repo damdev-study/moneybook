@@ -22,4 +22,5 @@ public class CycleParam {
     private LocalDateTime cycleEndDateStart;
     private LocalDateTime cycleEndDateEnd;
     private CycleType cycleType;
+    private String userSeqId;
 }

@@ -72,6 +72,10 @@ public class CycleController {
 
     @GetMapping("list")
     public ResponseEntity viewListCycleData(Pageable pageable, CycleParam cycleParam) {
+        if(Strings.isNullOrEmpty(cycleParam.getUserSeqId())) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Page<Cycle> page = cycleService.findPageCycle(cycleParam, pageable);
 
         return ResponseEntity.ok(page);
