@@ -38,6 +38,8 @@ public class History {
 
 //  @ManyToOne
 //  private UserInfo user;
+  
+  private String userSeqId;
 
   private MoneyType moneyType;
 
