@@ -291,8 +291,7 @@ public class HistoryControllerTest {
     .andDo(document(
         "historyList", 
         requestHeaders(
-          headerWithName(HttpHeaders.ACCEPT).description(MediaTypes.HAL_JSON),
-          headerWithName(HttpHeaders.CONTENT_TYPE).description(MediaType.APPLICATION_JSON_UTF8)
+          headerWithName(HttpHeaders.ACCEPT).description(MediaTypes.HAL_JSON)
         ),
         requestParameters(
           parameterWithName("userSeqId").description("유저 시퀀스 ID"),
