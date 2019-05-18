@@ -270,7 +270,7 @@ public class HistoryControllerTest {
   }
 
   @Test
-  public void findSearcsh() throws Exception {
+  public void findSearch() throws Exception {
 
     for ( int i=0; i<20;i++) {
     	History moneyInfo = new History();
@@ -283,8 +283,11 @@ public class HistoryControllerTest {
 
     mockMvc.perform(
       get("/api/moneybook/history/list")
+//        .param("userSeqId", "tempStringUserSeqId")
         .param("category", "커피1")
         .param("sort", "category,desc")
+        .param("startDate", "2018-04-13T13:05:49")
+        .param("endDate", "2019-06-14T13:05:49")
         .accept(MediaTypes.HAL_JSON)
     )
     .andDo(print())
@@ -295,26 +298,45 @@ public class HistoryControllerTest {
           headerWithName(HttpHeaders.ACCEPT).description(MediaTypes.HAL_JSON)
         ),
         requestParameters(
-          parameterWithName("userSeqId").description("유저 시퀀스 ID"),
-          parameterWithName("moneyType").description("입력된 내역의 타입"),
+//          parameterWithName("userSeqId").description("유저 시퀀스 ID"),
+          parameterWithName("moneyType").description("입력된 내역의 타입").optional(),
           parameterWithName("category").description("카테고리"),
-          parameterWithName("startDate").description("조회 시작 일자"),
-          parameterWithName("endDate").description("조회 종료 일자")
+          parameterWithName("startDate").description("조회 시작 일자[yyyy-MM-ddThh:mm:ss]"),
+          parameterWithName("endDate").description("조회 종료 일자"),
+          parameterWithName("sort").description("정렬('변수명, [ASC/DESC]')")
         ),
         responseHeaders(
-          headerWithName(HttpHeaders.LOCATION).description("location header"),
           headerWithName(HttpHeaders.CONTENT_TYPE).description(MediaTypes.HAL_JSON_UTF8_VALUE)
         ),
         responseFields(
-          fieldWithPath("id").description("등록된 내역의 ID"),
-          fieldWithPath("userSeqId").description("유저 시퀀스 ID"),
-          fieldWithPath("moneyType").description("입력된 내역의 타입"),
-          fieldWithPath("category").description("카테고리"),
-          fieldWithPath("activeType").description("내역의 상태"),
-          fieldWithPath("regDate").description("등록일"),
-          fieldWithPath("updateDate").description("수정일"),
-          fieldWithPath("changeMoney").description("금액"),
-          fieldWithPath("totalMoney").description("잔액")/*,
+          fieldWithPath("pageable.sort.sorted").description("정렬여부"),        
+          fieldWithPath("pageable.sort.unsorted").description("비정렬여부"),        
+          fieldWithPath("pageable.sort.empty").description("정렬정보의 존재여부"),        
+          fieldWithPath("pageable.offset").description(""),
+          fieldWithPath("pageable.pageNumber").description("현재 페이지"),
+          fieldWithPath("pageable.pageSize").description("페이지 크기"),
+          fieldWithPath("pageable.paged").description("페이징 여부"),
+          fieldWithPath("pageable.unpaged").description("페이징이 안됐는지"),
+          fieldWithPath("totalPages").description("전체 페이지 수"),
+          fieldWithPath("totalElements").description("전체 목록 수"),
+          fieldWithPath("last").description("마지막 여부"),
+          fieldWithPath("number").description(""),
+          fieldWithPath("size").description("페이지 크기"),
+          fieldWithPath("sort.sorted").description("정렬 여부"),
+          fieldWithPath("sort.unsorted").description("비정렬 여부"),
+          fieldWithPath("sort.empty").description("정력여부"),
+          fieldWithPath("numberOfElements").description("목록의 수"),
+          fieldWithPath("first").description("처음 여부"),
+          fieldWithPath("empty").description("목록의 존재 여부?"),
+          fieldWithPath("content[].id").description("등록된 내역의 ID"),
+          fieldWithPath("content[].userSeqId").description("유저 시퀀스 ID"),
+          fieldWithPath("content[].moneyType").description("입력된 내역의 타입"),
+          fieldWithPath("content[].category").description("카테고리"),
+          fieldWithPath("content[].activeType").description("내역의 상태"),
+          fieldWithPath("content[].regDate").description("등록일"),
+          fieldWithPath("content[].updateDate").description("수정일"),
+          fieldWithPath("content[].changeMoney").description("금액"),
+          fieldWithPath("content[].totalMoney").description("잔액")/*,
           fieldWithPath("_links.self.href").description("자기 자신"),
           fieldWithPath("_links.query-history.href").description("등록된 내역 조회 API"),
           fieldWithPath("_links.profile.href").description("프로필")*/
